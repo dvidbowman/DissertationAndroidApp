@@ -9,9 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.material.textfield.TextInputEditText;
-import com.vishnusivadas.advanced_httpurlconnection.PutData;
+
+// From github.com/vishnusivadasvs/advanced-httpurlconnection
 
 public class Login extends AppCompatActivity {
 
@@ -24,11 +24,13 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Definition of Controls
         username_textField = findViewById(R.id.textField_username);
         password_textField = findViewById(R.id.textField_password);
         logIn_btn = findViewById(R.id.button_Login);
         goToSignUp_textView = findViewById(R.id.textView_goToSignUp);
 
+        // OnClickListener for textView_goToSignUp, opens activity_sign_up
         goToSignUp_textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -38,6 +40,7 @@ public class Login extends AppCompatActivity {
             }
         });
 
+        // OnClickListener for button_Login, executes PutData
         logIn_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,6 +48,7 @@ public class Login extends AppCompatActivity {
 
                 username = String.valueOf(username_textField.getText()).trim();
                 password = String.valueOf(password_textField.getText()).trim();
+
 
                 if(!username.equals("") && !password.equals("")) {
                     Handler handler = new Handler();
@@ -65,6 +69,7 @@ public class Login extends AppCompatActivity {
                                     String result = putData.getResult();
 
                                     if(result.equals("Login Success")) {
+
                                         Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                         startActivity(intent);

@@ -13,9 +13,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 public class ImageCapture extends AppCompatActivity {
-    private Button back_btn;
-    private Button camera_btn;
+    private Button back_btn, camera_btn, save_btn;
     private ImageView shownImage_imgv;
+
 
     private static final int REQUEST_IMAGE_CAPTURE = 100;
 
@@ -24,8 +24,23 @@ public class ImageCapture extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_capture);
 
-        /*Button used to go back*/
         back_btn = (Button) findViewById(R.id.button_backCapture);
+        shownImage_imgv = findViewById(R.id.imageView_capturedImage);
+        camera_btn = findViewById(R.id.button_useCamera);
+
+        camera_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                try {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -33,23 +48,11 @@ public class ImageCapture extends AppCompatActivity {
             }
         });
 
-        /*ImageView to display the image just taken*/
-        shownImage_imgv = findViewById(R.id.imageView_capturedImage);
     }
 
     public void openMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-    }
-
-    public void takePictureIntent(View view) {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        try {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        } catch (ActivityNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
