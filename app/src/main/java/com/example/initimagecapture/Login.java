@@ -17,6 +17,7 @@ public class Login extends AppCompatActivity {
 
     private TextInputEditText username_textField, password_textField;
     private TextView goToSignUp_textView;
+    private TextView showUserId_textView;
     private Button logIn_btn;
 
     @Override
@@ -29,6 +30,7 @@ public class Login extends AppCompatActivity {
         password_textField = findViewById(R.id.textField_password);
         logIn_btn = findViewById(R.id.button_Login);
         goToSignUp_textView = findViewById(R.id.textView_goToSignUp);
+        showUserId_textView = findViewById(R.id.textView_displayUserId);
 
         // OnClickListener for textView_goToSignUp, opens activity_sign_up
         goToSignUp_textView.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +79,21 @@ public class Login extends AppCompatActivity {
                                     }
                                     else {
                                         Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+
+                            getUserId getUserId = new getUserId("http://192.168.0.29/LoginRegister/getuserid.php", "POST", data[0]);
+                            if(getUserId.startPut()) {
+                                if(getUserId.onComplete()) {
+                                    String result = getUserId.getResult();
+
+                                    if(!result.equals("-1")) {
+                                        User.setUserId(Integer.parseInt(result));
+                                        showUserId_textView.setText(User.getUserId());
+                                    }
+                                    else {
+                                        showUserId_textView.setText("getUserId failed...");
                                     }
                                 }
                             }
