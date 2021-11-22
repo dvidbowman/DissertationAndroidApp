@@ -6,11 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    private Button settings_btn;
-    private Button analyses_btn;
-    private Button camera_btn;
+    private Button settings_btn, analyses_btn, camera_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

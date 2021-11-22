@@ -30,7 +30,6 @@ public class Login extends AppCompatActivity {
         password_textField = findViewById(R.id.textField_password);
         logIn_btn = findViewById(R.id.button_Login);
         goToSignUp_textView = findViewById(R.id.textView_goToSignUp);
-        showUserId_textView = findViewById(R.id.textView_displayUserId);
 
         // OnClickListener for textView_goToSignUp, opens activity_sign_up
         goToSignUp_textView.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +56,8 @@ public class Login extends AppCompatActivity {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
+                            boolean loginAuth = false;
+
                             String[] fields = new String[2];
                             fields[0] = "username";
                             fields[1] = "password";
@@ -71,11 +72,7 @@ public class Login extends AppCompatActivity {
                                     String result = putData.getResult();
 
                                     if(result.equals("Login Success")) {
-
-                                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                        startActivity(intent);
-                                        finish();
+                                        loginAuth = true;
                                     }
                                     else {
                                         Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
@@ -83,20 +80,29 @@ public class Login extends AppCompatActivity {
                                 }
                             }
 
-                            getUserId getUserId = new getUserId("http://192.168.0.29/LoginRegister/getuserid.php", "POST", data[0]);
-                            if(getUserId.startPut()) {
-                                if(getUserId.onComplete()) {
-                                    String result = getUserId.getResult();
+                            if (loginAuth) {
+                                getUserId getUserId = new getUserId("http://192.168.0.29/LoginRegister/getuserid.php", "POST", data[0]);
+                                if(getUserId.startPut()) {
+                                    if(getUserId.onComplete()) {
+                                        String result = getUserId.getResult();
 
-                                    if(!result.equals("-1")) {
-                                        User.setUserId(Integer.parseInt(result));
-                                        showUserId_textView.setText(User.getUserId());
-                                    }
-                                    else {
-                                        showUserId_textView.setText("getUserId failed...");
+                                        if(!result.equals("-1")) {
+                                            User.setUsername(data[0]);
+                                            User.setUserId(Integer.parseInt(result));
+                                            Toast.makeText(getApplicationContext(), "Login Successful: " + User.getUserId(), Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                            startActivity(intent);
+                                            finish();
+
+                                        }
+                                        else {
+                                            Toast.makeText(getApplicationContext(), "User ID Failed", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 }
                             }
+
+
                         }
                     });
                 }
