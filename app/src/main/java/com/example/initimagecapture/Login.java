@@ -80,7 +80,7 @@ public class Login extends AppCompatActivity {
                             }
 
                             if (loginAuth) {
-                                getUserId getUserId = new getUserId("http://192.168.0.29/LoginRegister/getuserid.php", "POST", data[0]);
+                                getUserId getUserId = new getUserId("http://192.168.0.29/projectPHP/getuserid.php", "POST", data[0]);
                                 if(getUserId.startPut()) {
                                     if(getUserId.onComplete()) {
                                         String result = getUserId.getResult();

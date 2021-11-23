@@ -54,7 +54,7 @@ public class ImageCapture extends AppCompatActivity {
                 }
                 else {
 
-                    ImageUpload imageUpload = new ImageUpload("http://192.168.0.29/ImageUpload/imageupload.php", "POST", bitmapToByte(currentImageBitmap));
+                    ImageUpload imageUpload = new ImageUpload("http://192.168.0.29/projectPHP/imageupload.php", "POST", bitmapToByte(currentImageBitmap));
                     if(imageUpload.startPut()) {
                         if(imageUpload.onComplete()) {
                             String result = imageUpload.getResult();
