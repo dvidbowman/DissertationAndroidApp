@@ -11,13 +11,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 
-// From github.com/vishnusivadasvs/advanced-httpurlconnection
+// Adapted from github.com/vishnusivadasvs/advanced-httpurlconnection
 
 public class Login extends AppCompatActivity {
 
     private TextInputEditText username_textField, password_textField;
     private TextView goToSignUp_textView;
-    private TextView showUserId_textView;
     private Button logIn_btn;
 
     @Override
@@ -96,7 +95,7 @@ public class Login extends AppCompatActivity {
 
                                         }
                                         else {
-                                            Toast.makeText(getApplicationContext(), "User ID Failed", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 }

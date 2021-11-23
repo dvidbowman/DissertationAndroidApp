@@ -1,7 +1,11 @@
 package com.example.initimagecapture;
 
+import android.graphics.Bitmap;
+import android.util.Base64;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -10,19 +14,19 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
-public class getUserId extends Thread {
-    private String url, method, usernameData;
+public class ImageUpload extends Thread{
+    private String url, method, imgToString;
     String result_data = "Empty";
 
-    public getUserId(String url, String method, String username) {
+    public ImageUpload(String url, String method, byte[] imgByteArray) {
         this.url = url;
         this.method = method;
-        this.usernameData = username;
+        this.imgToString = Base64.encodeToString(imgByteArray, Base64.DEFAULT);
 
     }
 
-    @Override
     public void run() {
         try {
             String UTF8 = "UTF-8", iso = "iso-8859-1";
@@ -35,7 +39,8 @@ public class getUserId extends Thread {
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, UTF8));
             StringBuilder post_data = new StringBuilder();
 
-            post_data.append(URLEncoder.encode("username", "UTF-8")).append("=").append(URLEncoder.encode(usernameData, UTF8)).append("&");
+            post_data.append(URLEncoder.encode("user_id", "UTF-8")).append("=").append(URLEncoder.encode(String.valueOf(User.getUserId()), UTF8)).append("&");
+            post_data.append(URLEncoder.encode("image", "UTF-8")).append("=").append(URLEncoder.encode(imgToString, UTF8));
 
             bufferedWriter.write(post_data.toString());
             bufferedWriter.flush();
@@ -62,7 +67,7 @@ public class getUserId extends Thread {
     }
 
     public boolean startPut() {
-        getUserId.this.start();
+        ImageUpload.this.start();
         return true;
     }
 
@@ -86,4 +91,5 @@ public class getUserId extends Thread {
     public String getData() {
         return result_data;
     }
+
 }
