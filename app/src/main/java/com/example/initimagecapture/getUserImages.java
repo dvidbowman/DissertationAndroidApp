@@ -11,15 +11,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class getUserId extends Thread {
-    private String url, method, usernameData;
+public class getUserImages extends Thread {
+    private String url, method, uploadDate;
+    private int user_id;
     String result_data = "Empty";
 
-    public getUserId(String url, String method, String username) {
+    public getUserImages(String url, String method) {
         this.url = url;
         this.method = method;
-        this.usernameData = username;
-
+        //this.uploadDate = uploadDate;
+        this.user_id = User.getUserId();
     }
 
     @Override
@@ -35,7 +36,8 @@ public class getUserId extends Thread {
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, UTF8));
             StringBuilder post_data = new StringBuilder();
 
-            post_data.append(URLEncoder.encode("username", "UTF-8")).append("=").append(URLEncoder.encode(usernameData, UTF8)).append("&");
+            post_data.append(URLEncoder.encode("user_id", "UTF-8")).append("=").append(URLEncoder.encode(String.valueOf(user_id), UTF8)).append("&");
+            //post_data.append(URLEncoder.encode("uploaddate", "UTF-8")).append("=").append(URLEncoder.encode(uploadDate, UTF8));
 
             bufferedWriter.write(post_data.toString());
             bufferedWriter.flush();
@@ -62,7 +64,7 @@ public class getUserId extends Thread {
     }
 
     public boolean startPut() {
-        getUserId.this.start();
+        getUserImages.this.start();
         return true;
     }
 
