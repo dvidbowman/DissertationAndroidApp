@@ -44,13 +44,12 @@ public class Analyses extends AppCompatActivity {
 
         images_recyclerView = (RecyclerView) findViewById(R.id.recyclerView_Images);
 
-
-        getUserImages getUserImages = new getUserImages("http://192.168.0.29/projectPHP/getuserimages.php", "POST");
-        if(getUserImages.startPut()) {
-            if (getUserImages.onComplete()) {
+        makeRequest getUserImagesRequest = new makeRequest("http://192.168.0.29/projectPHP/getuserimages.php", "POST", "getUserImages");
+        if(getUserImagesRequest.startRequest()) {
+            if(getUserImagesRequest.onComplete()) {
 
                 try {
-                    JSONObject obj = new JSONObject(getUserImages.getResult());
+                    JSONObject obj = new JSONObject(getUserImagesRequest.getResult());
 
                     if (obj.getString("id").equals("0")) {
                         Toast.makeText(getApplicationContext(), "You currently have no images saved.", Toast.LENGTH_LONG).show();
@@ -60,12 +59,9 @@ public class Analyses extends AppCompatActivity {
                         imgDates.add(obj.getString("date"));
                         imgValues.add(obj.getString("value"));
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Images Could Not Be Loaded", Toast.LENGTH_LONG).show();
                 }
-
             }
         }
 

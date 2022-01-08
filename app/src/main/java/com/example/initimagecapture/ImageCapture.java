@@ -53,13 +53,12 @@ public class ImageCapture extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "No image to upload", Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    makeRequest makeRequest = new makeRequest("http://192.168.0.29/projectPHP/imageupload.php", "POST", "imageUpload", bitmapToByte(currentImageBitmap));
+                    if (makeRequest.startRequest()) {
+                        if(makeRequest.onComplete()) {
+                            String result = makeRequest.getResult();
 
-                    ImageUpload imageUpload = new ImageUpload("http://192.168.0.29/projectPHP/imageupload.php", "POST", bitmapToByte(currentImageBitmap));
-                    if(imageUpload.startPut()) {
-                        if(imageUpload.onComplete()) {
-                            String result = imageUpload.getResult();
-
-                            if(result.equals("Image uploaded successfully")) {
+                            if (result.equals("Image uploaded successfully")) {
                                 shownImage_imgv.setImageResource(android.R.color.transparent);
                                 Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
                             }

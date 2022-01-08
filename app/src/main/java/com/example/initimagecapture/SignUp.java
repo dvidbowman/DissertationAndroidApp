@@ -68,10 +68,10 @@ public class SignUp extends AppCompatActivity {
                             data[2] = password;
                             data[3] = email;
 
-                            PutData putData = new PutData("http://192.168.0.29/projectPHP/signup.php", "POST", fields, data);
-                            if(putData.startPut()) {
-                                if(putData.onComplete()) {
-                                    String result = putData.getResult();
+                            makeRequest signUpRequest = new makeRequest("http://192.168.0.29/projectPHP/signup.php", "POST", "signUp", fields, data);
+                            if (signUpRequest.startRequest()) {
+                                if(signUpRequest.onComplete()) {
+                                    String result = signUpRequest.getResult();
 
                                     if(result.equals("Sign Up Success")) {
                                         Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();

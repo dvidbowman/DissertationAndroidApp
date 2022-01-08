@@ -65,10 +65,11 @@ public class Login extends AppCompatActivity {
                             data[0] = username;
                             data[1] = password;
 
-                            PutData putData = new PutData("http://192.168.0.29/projectPHP/login.php", "POST", fields, data);
-                            if(putData.startPut()) {
-                                if(putData.onComplete()) {
-                                    String result = putData.getResult();
+
+                            makeRequest logInAuthRequest = new makeRequest("http://192.168.0.29/projectPHP/login.php", "POST", "logIn", fields, data);
+                            if(logInAuthRequest.startRequest()) {
+                                if(logInAuthRequest.onComplete()) {
+                                    String result = logInAuthRequest.getResult();
 
                                     if(result.equals("Login Success")) {
                                         loginAuth = true;
@@ -80,10 +81,10 @@ public class Login extends AppCompatActivity {
                             }
 
                             if (loginAuth) {
-                                getUserId getUserId = new getUserId("http://192.168.0.29/projectPHP/getuserid.php", "POST", data[0]);
-                                if(getUserId.startPut()) {
-                                    if(getUserId.onComplete()) {
-                                        String result = getUserId.getResult();
+                                makeRequest getUserIdRequest = new makeRequest("http://192.168.0.29/projectPHP/getuserid.php", "POST", "getUserId", data[0]);
+                                if(getUserIdRequest.startRequest()) {
+                                    if(getUserIdRequest.onComplete()) {
+                                        String result = getUserIdRequest.getResult();
 
                                         if(!result.equals("-1")) {
                                             User.setUsername(data[0]);
@@ -99,9 +100,8 @@ public class Login extends AppCompatActivity {
                                         }
                                     }
                                 }
+
                             }
-
-
                         }
                     });
                 }
