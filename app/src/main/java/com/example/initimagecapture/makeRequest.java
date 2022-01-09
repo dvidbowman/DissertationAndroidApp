@@ -17,26 +17,29 @@ public class makeRequest extends Thread {
 
     // Url to make request to, the HTTP method to use, and the purpose of request (getUserID, getUserImages etc.)
     private String url, httpMethod, action;
-    private String username, imgToString;
+    private String username, imgToString, currentRowNumber;
     String[] data, field;
 
     // Result from the HTTP Request
     String result_data = "Empty";
 
     // Constructor for getUserImages
-    public makeRequest(String url, String httpMethod, String action) {
+    public makeRequest(String url, String httpMethod, String action, String currentRowNumber) {
         this.url = url;
         this.httpMethod = httpMethod;
         this.action = action;
+        this.currentRowNumber = currentRowNumber;
     }
 
     // Constructor for getUserId
+    /*
     public makeRequest(String url, String httpMethod, String action, String username) {
         this.url = url;
         this.httpMethod = httpMethod;
         this.action = action;
         this.username = username;
     }
+     */
 
     // Constructor for signUp
     public makeRequest(String url, String httpMethod, String action, String[] field, String[] data) {
@@ -83,14 +86,12 @@ public class makeRequest extends Thread {
                     }
                     break;
                 case "getUserImages":
-                    post_data.append(URLEncoder.encode("user_id", "UTF-8")).append("=").append(URLEncoder.encode(String.valueOf(User.getUserId()), UTF8));
-                    break;
-                case "getUserId":
-                    post_data.append(URLEncoder.encode("username", "UTF-8")).append("=").append(URLEncoder.encode(this.username, UTF8));
+                    post_data.append(URLEncoder.encode("user_id", "UTF-8")).append("=").append(URLEncoder.encode(String.valueOf(User.getUserId()), UTF8)).append("&");
+                    post_data.append(URLEncoder.encode("currentRowNumber", "UTF-8")).append("=").append(URLEncoder.encode(String.valueOf(this.currentRowNumber), UTF8));
                     break;
                 case "imageUpload":
                     post_data.append(URLEncoder.encode("user_id", "UTF-8")).append("=").append(URLEncoder.encode(String.valueOf(User.getUserId()), UTF8)).append("&");
-                    post_data.append(URLEncoder.encode("image", "UTF-8")).append("=").append(URLEncoder.encode(imgToString, UTF8));
+                    post_data.append(URLEncoder.encode("image", "UTF-8")).append("=").append(URLEncoder.encode(this.imgToString, UTF8));
                     break;
                 default:
                     break;

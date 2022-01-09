@@ -61,6 +61,7 @@ public class ImageCapture extends AppCompatActivity {
                             if (result.equals("Image uploaded successfully")) {
                                 shownImage_imgv.setImageResource(android.R.color.transparent);
                                 Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+                                User.setUserImageNo(User.getUserImageNo() + 1);
                             }
                             else {
                                 Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();

@@ -44,26 +44,28 @@ public class Analyses extends AppCompatActivity {
 
         images_recyclerView = (RecyclerView) findViewById(R.id.recyclerView_Images);
 
-        makeRequest getUserImagesRequest = new makeRequest("http://192.168.0.29/projectPHP/getuserimages.php", "POST", "getUserImages");
-        if(getUserImagesRequest.startRequest()) {
-            if(getUserImagesRequest.onComplete()) {
+        for (int i = 0; i < User.getUserImageNo(); i++) {
+            makeRequest getUserImagesRequest = new makeRequest("http://192.168.0.29/projectPHP/getuserimages.php", "POST", "getUserImages", String.valueOf(i));
+            if(getUserImagesRequest.startRequest()) {
+                if(getUserImagesRequest.onComplete()) {
 
-                try {
-                    JSONObject obj = new JSONObject(getUserImagesRequest.getResult());
+                    try {
+                        JSONObject obj = new JSONObject(getUserImagesRequest.getResult());
 
-                    if (obj.getString("id").equals("0")) {
-                        Toast.makeText(getApplicationContext(), "You currently have no images saved.", Toast.LENGTH_LONG).show();
+                        if (!obj.getString("id").equals("0")) {
+                            imgIDs.add(obj.getString("id"));
+                            imgDates.add(obj.getString("date"));
+                            imgValues.add(obj.getString("value"));
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    else {
-                        imgIDs.add(obj.getString("id"));
-                        imgDates.add(obj.getString("date"));
-                        imgValues.add(obj.getString("value"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
             }
         }
+
+        Toast.makeText(getApplicationContext(), "Images found: " + imgIDs.size(), Toast.LENGTH_SHORT).show();
 
         RVAdapter adapter = new RVAdapter(this, imgIDs, imgDates, imgValues);
         images_recyclerView.setAdapter(adapter);

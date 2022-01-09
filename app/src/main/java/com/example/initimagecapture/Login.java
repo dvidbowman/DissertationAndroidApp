@@ -11,6 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 // Adapted from github.com/vishnusivadasvs/advanced-httpurlconnection
 
 public class Login extends AppCompatActivity {
@@ -69,38 +72,30 @@ public class Login extends AppCompatActivity {
                             makeRequest logInAuthRequest = new makeRequest("http://192.168.0.29/projectPHP/login.php", "POST", "logIn", fields, data);
                             if(logInAuthRequest.startRequest()) {
                                 if(logInAuthRequest.onComplete()) {
-                                    String result = logInAuthRequest.getResult();
 
-                                    if(result.equals("Login Success")) {
-                                        loginAuth = true;
-                                    }
-                                    else {
-                                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
+                                    try {
+                                        JSONObject obj = new JSONObject(logInAuthRequest.getResult());
 
-                            if (loginAuth) {
-                                makeRequest getUserIdRequest = new makeRequest("http://192.168.0.29/projectPHP/getuserid.php", "POST", "getUserId", data[0]);
-                                if(getUserIdRequest.startRequest()) {
-                                    if(getUserIdRequest.onComplete()) {
-                                        String result = getUserIdRequest.getResult();
+                                        if (obj.getString("error").equals("none")) {
 
-                                        if(!result.equals("-1")) {
                                             User.setUsername(data[0]);
-                                            User.setUserId(Integer.parseInt(result));
-                                            Toast.makeText(getApplicationContext(), "Login Successful: " + User.getUserId(), Toast.LENGTH_SHORT).show();
+                                            User.setUserId(Integer.parseInt(obj.getString("id")));
+                                            User.setUserImageNo(Integer.parseInt(obj.getString("noImages")));
+                                            Toast.makeText(getApplicationContext(), "Login Successful: UserID = " + User.getUserId(), Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                             startActivity(intent);
                                             finish();
 
                                         }
                                         else {
-                                            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(), obj.getString("error"), Toast.LENGTH_LONG).show();
                                         }
-                                    }
-                                }
 
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
                             }
                         }
                     });
