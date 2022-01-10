@@ -17,13 +17,11 @@ import java.util.ArrayList;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.RVViewHolder> {
 
-    private ArrayList<String> imgIDs, imgDates, imgValues;
+    private ArrayList<UserImage> images;
     private Context context;
 
-    public RVAdapter(Context ct, ArrayList<String> imgIDs, ArrayList<String> imgDates, ArrayList<String> imgValues) {
-        this.imgIDs = imgIDs;
-        this.imgDates = imgDates;
-        this.imgValues = imgValues;
+    public RVAdapter(Context ct, ArrayList<UserImage> images) {
+        this.images = images;
         this.context = ct;
     }
 
@@ -37,18 +35,18 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.RVViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RVViewHolder holder, int position) {
-        holder.id.setText(imgIDs.get(position));
-        holder.date.setText(imgDates.get(position));
+        holder.id.setText(images.get(position).getImgId());
+        holder.date.setText(images.get(position).getImgDate());
 
         //Converting Image String to Bitmap to show it in ImageView
-        byte[] imgByteArray = Base64.decode(imgValues.get(position), Base64.DEFAULT);
+        byte[] imgByteArray = Base64.decode(images.get(position).getImgValue(), Base64.DEFAULT);
         Bitmap imgBitmap = BitmapFactory.decodeByteArray(imgByteArray, 0, imgByteArray.length);
         holder.img.setImageBitmap(imgBitmap);
     }
 
     @Override
     public int getItemCount() {
-        return imgValues.size();
+        return images.size();
     }
 
     public class RVViewHolder extends RecyclerView.ViewHolder {

@@ -4,10 +4,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.hardware.camera2.*;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -31,14 +34,28 @@ public class ImageCapture extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_capture);
 
+
+
         back_btn = (Button) findViewById(R.id.button_backCapture);
         shownImage_imgv = findViewById(R.id.imageView_capturedImage);
         camera_btn = findViewById(R.id.button_useCamera);
         save_btn = findViewById(R.id.button_saveImage);
 
+
+
         camera_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                /*
+                if (checkCameraHardware(getApplicationContext())) {
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "This device has no available camera", Toast.LENGTH_SHORT);
+                }
+
+                 */
+
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
                 try {
@@ -114,5 +131,27 @@ public class ImageCapture extends AppCompatActivity {
         bmp.compress(Bitmap.CompressFormat.PNG, 100, bOutputStream);
 
         return bOutputStream.toByteArray();
+    }
+
+    // Check for camera on device
+    private boolean checkCameraHardware(Context c) {
+        if (c.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    private static CameraDevice getCameraInstance() {
+        CameraDevice c = null;
+
+        try {
+
+        } catch (Exception e) {
+
+        }
+
+        return c;
     }
 }

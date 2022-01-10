@@ -76,10 +76,6 @@ public class makeRequest extends Thread {
 
             switch(action) {
                 case "signUp":
-                    for (int i = 0; i < this.field.length; i++) {
-                        post_data.append(URLEncoder.encode(this.field[i], "UTF-8")).append("=").append(URLEncoder.encode(this.data[i], UTF8)).append("&");
-                    }
-                    break;
                 case "logIn":
                     for (int i = 0; i < this.field.length; i++) {
                         post_data.append(URLEncoder.encode(this.field[i], "UTF-8")).append("=").append(URLEncoder.encode(this.data[i], UTF8)).append("&");
