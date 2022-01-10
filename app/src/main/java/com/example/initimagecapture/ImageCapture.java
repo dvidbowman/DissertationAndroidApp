@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 
 public class ImageCapture extends AppCompatActivity {
@@ -53,18 +56,25 @@ public class ImageCapture extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "No image to upload", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    makeRequest makeRequest = new makeRequest("http://192.168.0.29/projectPHP/imageupload.php", "POST", "imageUpload", bitmapToByte(currentImageBitmap));
-                    if (makeRequest.startRequest()) {
-                        if(makeRequest.onComplete()) {
-                            String result = makeRequest.getResult();
+                    makeRequest imageUploadRequest = new makeRequest("http://192.168.0.29/projectPHP/imageupload.php", "POST", "imageUpload", bitmapToByte(currentImageBitmap));
+                    if (imageUploadRequest.startRequest()) {
+                        if(imageUploadRequest.onComplete()) {
 
-                            if (result.equals("Image uploaded successfully")) {
-                                shownImage_imgv.setImageResource(android.R.color.transparent);
-                                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-                                User.setUserImageNo(User.getUserImageNo() + 1);
-                            }
-                            else {
-                                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+                            try {
+                                JSONObject obj = new JSONObject(imageUploadRequest.getResult());
+
+                                if (obj.getString("message").equals("none")) {
+                                    //shownImage_imgv.setImageResource(android.R.color.transparent);
+                                    shownImage_imgv.setImageDrawable(null);
+                                    Toast.makeText(getApplicationContext(), "Image Uploaded Successfully", Toast.LENGTH_LONG).show();
+                                    User.setUserImageNo(User.getUserImageNo() + 1);
+                                }
+                                else {
+                                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
+                                }
+
+                            } catch (JSONException e) {
+                                Toast.makeText(getApplicationContext(), "Error Uploading Image", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }

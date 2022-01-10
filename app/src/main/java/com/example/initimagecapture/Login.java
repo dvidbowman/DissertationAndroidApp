@@ -68,7 +68,6 @@ public class Login extends AppCompatActivity {
                             data[0] = username;
                             data[1] = password;
 
-
                             makeRequest logInAuthRequest = new makeRequest("http://192.168.0.29/projectPHP/login.php", "POST", "logIn", fields, data);
                             if(logInAuthRequest.startRequest()) {
                                 if(logInAuthRequest.onComplete()) {
@@ -76,7 +75,7 @@ public class Login extends AppCompatActivity {
                                     try {
                                         JSONObject obj = new JSONObject(logInAuthRequest.getResult());
 
-                                        if (obj.getString("error").equals("none")) {
+                                        if (obj.getString("message").equals("none")) {
 
                                             User.setUsername(data[0]);
                                             User.setUserId(Integer.parseInt(obj.getString("id")));
@@ -88,11 +87,11 @@ public class Login extends AppCompatActivity {
 
                                         }
                                         else {
-                                            Toast.makeText(getApplicationContext(), obj.getString("error"), Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
                                         }
 
                                     } catch (JSONException e) {
-                                        e.printStackTrace();
+                                        Toast.makeText(getApplicationContext(), "JSON Parse Failure...", Toast.LENGTH_SHORT).show();
                                     }
 
                                 }

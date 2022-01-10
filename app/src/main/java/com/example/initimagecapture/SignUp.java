@@ -11,6 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 // From github.com/vishnusivadasvs/advanced-httpurlconnection
 
 public class SignUp extends AppCompatActivity {
@@ -71,16 +74,22 @@ public class SignUp extends AppCompatActivity {
                             makeRequest signUpRequest = new makeRequest("http://192.168.0.29/projectPHP/signup.php", "POST", "signUp", fields, data);
                             if (signUpRequest.startRequest()) {
                                 if(signUpRequest.onComplete()) {
-                                    String result = signUpRequest.getResult();
 
-                                    if(result.equals("Sign Up Success")) {
-                                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(getApplicationContext(), Login.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                    else {
-                                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                                    try {
+                                        JSONObject obj = new JSONObject(signUpRequest.getResult());
+
+                                        if (obj.getString("message").equals("none")) {
+                                            Toast.makeText(getApplicationContext(), "Sign Up Success", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(getApplicationContext(), Login.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                        else {
+                                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    } catch (JSONException e) {
+                                        Toast.makeText(getApplicationContext(), "JSON Parse Failure", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }
