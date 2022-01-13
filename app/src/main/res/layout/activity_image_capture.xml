@@ -6,13 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".ImageCapture">
 
-    <TextView
-        android:id="@+id/textView_ImageCapture"
+    <TextureView
+        android:id="@+id/textureView_camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/image_capture"
-        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,36 +27,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button_useCamera"
+        android:id="@+id/button_captureImage"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:text="@string/use_camera"
+        android:text="@string/capture"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_ImageCapture" />
+        app:layout_constraintTop_toTopOf="@+id/textureView_camera"
+        app:layout_constraintVertical_bias="0.907" />
 
-    <ImageView
-        android:id="@+id/imageView_capturedImage"
-        android:layout_width="250dp"
-        android:layout_height="320dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_useCamera" />
-
-    <Button
-        android:id="@+id/button_saveImage"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="36dp"
-        android:layout_marginBottom="36dp"
-        android:text="@string/upload_image"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
