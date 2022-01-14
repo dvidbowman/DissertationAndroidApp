@@ -31,7 +31,6 @@ public class Analyses extends AppCompatActivity {
     private Button back_btn, filter_btn;
     private RecyclerView images_recyclerView;
     private Spinner months_spinner, years_spinner;
-    private TextView test_textView;
 
     ArrayList<UserImage> images = new ArrayList<>();
     ArrayList<UserImage> filteredImages = new ArrayList<>();
@@ -42,7 +41,6 @@ public class Analyses extends AppCompatActivity {
         setContentView(R.layout.activity_analyses);
         years_spinner = findViewById(R.id.spinner_years);
         months_spinner = findViewById(R.id.spinner_months);
-        test_textView = findViewById(R.id.textView3);
 
         // Adding Values for Year Spinner using current year
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);

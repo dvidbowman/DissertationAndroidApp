@@ -1,7 +1,9 @@
 package com.example.initimagecapture;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,14 +11,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    private Button settings_btn, analyses_btn, camera_btn;
+    private Button settings_btn, analyses_btn, camera_btn, logout_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
 
         settings_btn = (Button) findViewById(R.id.button_settings);
         settings_btn.setOnClickListener(new View.OnClickListener() {
@@ -41,6 +41,29 @@ public class MainActivity extends AppCompatActivity {
                 openCameraActivity();
             }
         });
+
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        openLoginActivity();
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            }
+        };
+
+        logout_btn = (Button) findViewById(R.id.button_logout);
+        logout_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setMessage("Are you sure you want to Log Out?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
+            }
+        });
     }
 
     public void openSettingsActivity() {
@@ -55,6 +78,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void openCameraActivity() {
         Intent intent = new Intent(this, ImageCapture.class);
+        startActivity(intent);
+    }
+
+    public void openLoginActivity() {
+        User.resetUser();
+
+        Intent intent = new Intent(this, Login.class);
         startActivity(intent);
     }
 }

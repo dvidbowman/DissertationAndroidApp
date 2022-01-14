@@ -58,8 +58,6 @@ public class Login extends AppCompatActivity {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            boolean loginAuth = false;
-
                             String[] fields = new String[2];
                             fields[0] = "username";
                             fields[1] = "password";
@@ -91,7 +89,7 @@ public class Login extends AppCompatActivity {
                                         }
 
                                     } catch (JSONException e) {
-                                        Toast.makeText(getApplicationContext(), "JSON Parse Failure...", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "JSON Parse Failure:" + logInAuthRequest.getResult(), Toast.LENGTH_SHORT).show();
                                     }
 
                                 }

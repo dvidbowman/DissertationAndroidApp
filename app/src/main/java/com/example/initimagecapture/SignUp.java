@@ -18,7 +18,7 @@ import org.json.JSONObject;
 
 public class SignUp extends AppCompatActivity {
 
-    private TextInputEditText fullName_textField, username_textField, password_textField, email_textField;
+    private TextInputEditText fullName_textField, username_textField, password_textField;
     private TextView alreadyUser_textView;
     private Button signUp_btn;
 
@@ -31,7 +31,6 @@ public class SignUp extends AppCompatActivity {
         fullName_textField = findViewById(R.id.textField_fullName);
         username_textField = findViewById(R.id.textField_username);
         password_textField = findViewById(R.id.textField_password);
-        email_textField = findViewById(R.id.textField_email);
         signUp_btn = findViewById(R.id.button_signUp);
         alreadyUser_textView = findViewById(R.id.textView_alreadyUser);
 
@@ -47,29 +46,26 @@ public class SignUp extends AppCompatActivity {
         signUp_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String fullName, username, password, email;
+                final String fullName, username, password;
 
                 fullName = String.valueOf(fullName_textField.getText()).trim();
                 username = String.valueOf(username_textField.getText()).trim();
                 password = String.valueOf(password_textField.getText()).trim();
-                email = String.valueOf(email_textField.getText()).trim();
 
-                if(!fullName.equals("") && !username.equals("") && !password.equals("") && !email.equals("")) {
+                if(!fullName.equals("") && !username.equals("") && !password.equals("")) {
                     Handler handler = new Handler();
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            String[] fields = new String[4];
+                            String[] fields = new String[3];
                             fields[0] = "fullname";
                             fields[1] = "username";
                             fields[2] = "password";
-                            fields[3] = "email";
 
-                            String[] data = new String[4];
+                            String[] data = new String[3];
                             data[0] = fullName;
                             data[1] = username;
                             data[2] = password;
-                            data[3] = email;
 
                             makeRequest signUpRequest = new makeRequest("http://192.168.0.29/projectPHP/signup.php", "POST", "signUp", fields, data);
                             if (signUpRequest.startRequest()) {

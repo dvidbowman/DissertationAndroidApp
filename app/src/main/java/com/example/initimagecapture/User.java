@@ -7,6 +7,13 @@ public class User {
     private static int noImages;
     private static byte[] byteArray;
 
+    public static void resetUser() {
+        userId = -1;
+        username = "";
+        noImages = -1;
+        byteArray = null;
+    }
+
     public static int getUserId() {
         return userId;
     }

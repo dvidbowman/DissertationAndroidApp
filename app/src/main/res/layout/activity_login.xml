@@ -7,6 +7,20 @@
     tools:context=".Login">
 
     <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/textField_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="50dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:hint="@string/password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textField_username" />
+
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/textField_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,55 +30,58 @@
         android:hint="@string/username"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.636"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.078" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/textField_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:fontFamily="sans-serif-condensed-medium"
-        android:hint="@string/password"
-        app:layout_constraintTop_toBottomOf="@+id/textField_username"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintVertical_bias="0.089" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView_goToSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
-        android:fontFamily="sans-serif-condensed-medium"
-        android:text="@string/sign_in"
-        android:textSize="24sp"
+        android:layout_marginTop="36dp"
+        android:text="@string/create_account_here"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.147"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/button_Login" />
 
     <Button
         android:id="@+id/button_Login"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="52dp"
         android:text="@string/go"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textField_password" />
 
     <TextView
-        android:id="@+id/textView_goToSignUp"
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="112dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="@string/sign_in"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.147"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="@string/create_account_here"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="@string/initimagecapture"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.203"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_Login" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
