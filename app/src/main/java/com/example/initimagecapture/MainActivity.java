@@ -6,11 +6,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.opencv.android.OpenCVLoader;
+
 public class MainActivity extends AppCompatActivity {
+    private static String TAG = "MainActivity";
+    static {
+        if (OpenCVLoader.initDebug()) {
+            Log.d(TAG, "OpenCV installed successfully");
+        }
+        else {
+            Log.d(TAG, "OpenCV could not be installed");
+        }
+    }
+
     private Button settings_btn, analyses_btn, camera_btn, logout_btn;
 
     @Override
