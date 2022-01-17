@@ -1,0 +1,1 @@
+C:\Users\djbow\AndroidStudioProjects\InitImageCapture\sdk\build\intermediates\cxx\RelWithDebInfo\1y324d5q\obj\arm64-v8a
