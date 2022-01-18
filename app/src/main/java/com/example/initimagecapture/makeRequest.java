@@ -14,7 +14,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 public class makeRequest extends Thread {
-
     // Url to make request to, the HTTP method to use, and the purpose of request (getUserID, getUserImages etc.)
     private String url, httpMethod, action;
     private String username, imgToString, currentRowNumber;
@@ -31,17 +30,7 @@ public class makeRequest extends Thread {
         this.currentRowNumber = currentRowNumber;
     }
 
-    // Constructor for getUserId
-    /*
-    public makeRequest(String url, String httpMethod, String action, String username) {
-        this.url = url;
-        this.httpMethod = httpMethod;
-        this.action = action;
-        this.username = username;
-    }
-     */
-
-    // Constructor for signUp
+    // Constructor for signUp and logIn
     public makeRequest(String url, String httpMethod, String action, String[] field, String[] data) {
         this.url = url;
         this.httpMethod = httpMethod;
@@ -74,6 +63,7 @@ public class makeRequest extends Thread {
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, UTF8));
             StringBuilder post_data = new StringBuilder();
 
+            // Switch Case handles the action to be performed
             switch(action) {
                 case "signUp":
                 case "logIn":

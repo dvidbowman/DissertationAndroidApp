@@ -1,5 +1,7 @@
 package com.example.initimagecapture;
 
+// Used to handle retrieval and filtering of User Images from Database
+
 public class UserImage {
     private String imgId, imgDate, imgValue;
 

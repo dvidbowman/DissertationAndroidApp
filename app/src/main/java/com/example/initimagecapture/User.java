@@ -7,6 +7,7 @@ public class User {
     private static int noImages;
     private static byte[] byteArray;
 
+    // resetUser called upon LogOut
     public static void resetUser() {
         userId = -1;
         username = "";

@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // OnClickListener for Settings button
         settings_btn = (Button) findViewById(R.id.button_settings);
         settings_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // OnClickListener for Analyses Button
         analyses_btn = (Button) findViewById(R.id.button_analyses);
         analyses_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // OnClickListener for TakeAnImage button
         camera_btn = (Button) findViewById(R.id.button_camera);
         camera_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // DialogInterface presented when user clicks LogOut
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -68,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        // OnClickListener for LogOut button
         logout_btn = (Button) findViewById(R.id.button_logout);
         logout_btn.setOnClickListener(new View.OnClickListener() {
             @Override

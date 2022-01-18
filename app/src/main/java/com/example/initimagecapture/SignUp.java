@@ -17,11 +17,10 @@ import org.json.JSONObject;
 // From github.com/vishnusivadasvs/advanced-httpurlconnection
 
 public class SignUp extends AppCompatActivity {
-
+    // Controls
     private TextInputEditText fullName_textField, username_textField, password_textField;
     private TextView alreadyUser_textView;
     private Button signUp_btn;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +33,7 @@ public class SignUp extends AppCompatActivity {
         signUp_btn = findViewById(R.id.button_signUp);
         alreadyUser_textView = findViewById(R.id.textView_alreadyUser);
 
+        // OnClickListener for AlreadyAUser TextView
         alreadyUser_textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,6 +43,7 @@ public class SignUp extends AppCompatActivity {
             }
         });
 
+        // OnClickListener for SignUp button
         signUp_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +98,6 @@ public class SignUp extends AppCompatActivity {
                 }
             }
         });
-
 
     }
 

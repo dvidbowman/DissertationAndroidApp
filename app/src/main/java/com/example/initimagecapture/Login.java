@@ -17,7 +17,7 @@ import org.json.JSONObject;
 // Adapted from github.com/vishnusivadasvs/advanced-httpurlconnection
 
 public class Login extends AppCompatActivity {
-
+    // Controls
     private TextInputEditText username_textField, password_textField;
     private TextView goToSignUp_textView;
     private Button logIn_btn;
@@ -27,13 +27,12 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Definition of Controls
         username_textField = findViewById(R.id.textField_username);
         password_textField = findViewById(R.id.textField_password);
         logIn_btn = findViewById(R.id.button_Login);
         goToSignUp_textView = findViewById(R.id.textView_goToSignUp);
 
-        // OnClickListener for textView_goToSignUp, opens activity_sign_up
+        // OnClickListener for GoToSignUp TextView
         goToSignUp_textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,7 +42,7 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        // OnClickListener for button_Login, executes PutData
+        // OnClickListener for LogIn button
         logIn_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +50,6 @@ public class Login extends AppCompatActivity {
 
                 username = String.valueOf(username_textField.getText()).trim();
                 password = String.valueOf(password_textField.getText()).trim();
-
 
                 if(!username.equals("") && !password.equals("")) {
                     Handler handler = new Handler();
@@ -101,5 +99,7 @@ public class Login extends AppCompatActivity {
                 }
             }
         });
+
     }
+
 }

@@ -53,11 +53,11 @@ import java.util.List;
 import java.util.UUID;
 
 public class ImageCapture extends AppCompatActivity {
-    private byte[] currentImageBytes;
-
+    // Controls
     private Button back_btn, capture_btn;
     private TextureView camera_texturev;
 
+    // Fields for Camera Operation
     private String cameraId;
     private CameraDevice cameraDevice;
     private CameraCaptureSession cameraCaptureSessions;
@@ -74,7 +74,6 @@ public class ImageCapture extends AppCompatActivity {
     }
 
     private static final int REQUEST_CAMERA_PERMISSION = 200;
-    private boolean mFlashSupported;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
 
@@ -101,12 +100,13 @@ public class ImageCapture extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_capture);
+
         camera_texturev = findViewById(R.id.textureView_camera);
         back_btn = (Button) findViewById(R.id.button_backCapture);
         capture_btn = findViewById(R.id.button_captureImage);
-
         camera_texturev.setSurfaceTextureListener(textureListener);
 
+        // OnClickListener for Capture button
         capture_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,6 +114,7 @@ public class ImageCapture extends AppCompatActivity {
             }
         });
 
+        // OnClickListener for Back Button
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,11 +122,6 @@ public class ImageCapture extends AppCompatActivity {
             }
         });
 
-    }
-
-    public void openMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
     }
 
     private void takePicture() {
@@ -178,8 +174,6 @@ public class ImageCapture extends AppCompatActivity {
                         }
                     }
                 }
-
-
             };
 
             reader.setOnImageAvailableListener(readerListener, mBackgroundHandler);
@@ -206,7 +200,6 @@ public class ImageCapture extends AppCompatActivity {
                 public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
 
                 }
-
 
             }, mBackgroundHandler);
 
@@ -354,5 +347,9 @@ public class ImageCapture extends AppCompatActivity {
         }
     }
 
+    public void openMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
 
 }
