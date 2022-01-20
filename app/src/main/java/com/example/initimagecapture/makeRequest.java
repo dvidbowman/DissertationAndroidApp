@@ -17,6 +17,7 @@ public class makeRequest extends Thread {
     // Url to make request to, the HTTP method to use, and the purpose of request (getUserID, getUserImages etc.)
     private String url, httpMethod, action;
     private String username, imgToString, currentRowNumber;
+    private String deviceManufacturer, deviceModel, deviceOs;
     String[] data, field;
 
     // Result from the HTTP Request
@@ -42,11 +43,14 @@ public class makeRequest extends Thread {
     }
 
     // Constructor for imageUpload
-    public makeRequest(String url, String httpMethod, String action, byte[] imgByteArray) {
+    public makeRequest(String url, String httpMethod, String action, byte[] imgByteArray, String deviceManufacturer, String deviceModel, String deviceOs) {
         this.url = url;
         this.httpMethod = httpMethod;
         this.action = action;
         this.imgToString = Base64.encodeToString(imgByteArray, Base64.DEFAULT);
+        this.deviceManufacturer = deviceManufacturer;
+        this.deviceModel = deviceModel;
+        this.deviceOs = deviceOs;
     }
 
     @Override
@@ -77,7 +81,10 @@ public class makeRequest extends Thread {
                     break;
                 case "imageUpload":
                     post_data.append(URLEncoder.encode("user_id", "UTF-8")).append("=").append(URLEncoder.encode(String.valueOf(User.getUserId()), UTF8)).append("&");
-                    post_data.append(URLEncoder.encode("image", "UTF-8")).append("=").append(URLEncoder.encode(this.imgToString, UTF8));
+                    post_data.append(URLEncoder.encode("image", "UTF-8")).append("=").append(URLEncoder.encode(this.imgToString, UTF8)).append("&");
+                    post_data.append(URLEncoder.encode("device_manufacturer", "UTF-8")).append("=").append(URLEncoder.encode(this.deviceManufacturer, UTF8)).append("&");
+                    post_data.append(URLEncoder.encode("device_model", "UTF-8")).append("=").append(URLEncoder.encode(this.deviceModel, UTF8)).append("&");
+                    post_data.append(URLEncoder.encode("device_os", "UTF-8")).append("=").append(URLEncoder.encode(this.deviceOs, UTF8));
                     break;
                 default:
                     break;

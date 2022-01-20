@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -86,7 +87,11 @@ public class ImageAnalysis extends AppCompatActivity {
 
     // Saving cropped image in database
     private void save(byte[] bytes) throws IOException {
-        makeRequest imageUploadRequest = new makeRequest("http://192.168.0.29/projectPHP/imageupload.php", "POST", "imageUpload", bytes);
+        String deviceManufacturer = Build.MANUFACTURER;
+        String deviceModel = Build.MODEL;
+        String deviceOs = Build.VERSION.RELEASE;
+
+        makeRequest imageUploadRequest = new makeRequest("http://192.168.0.29/projectPHP/imageupload.php", "POST", "imageUpload", bytes, deviceManufacturer, deviceModel, deviceOs);
         if (imageUploadRequest.startRequest()) {
             if(imageUploadRequest.onComplete()) {
 
@@ -102,7 +107,7 @@ public class ImageAnalysis extends AppCompatActivity {
                     }
 
                 } catch (JSONException e) {
-                    Toast.makeText(getApplicationContext(), "Error Uploading Image", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), imageUploadRequest.getResult(), Toast.LENGTH_SHORT).show();
                 }
             }
         }
