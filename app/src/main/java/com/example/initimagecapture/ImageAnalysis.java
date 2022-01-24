@@ -63,6 +63,12 @@ public class ImageAnalysis extends AppCompatActivity {
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                detection.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                User.setCroppedImageByteArray(baos.toByteArray());
+                openGetDyeAreaActivity();
+
+                /*
                 try {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     detection.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -71,6 +77,8 @@ public class ImageAnalysis extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
+                 */
 
             }
         });
@@ -210,6 +218,11 @@ public class ImageAnalysis extends AppCompatActivity {
 
     private void openImageCaptureActivity() {
         Intent intent = new Intent(this, ImageCapture.class);
+        startActivity(intent);
+    }
+
+    private void openGetDyeAreaActivity() {
+        Intent intent = new Intent(this, GetDyeArea.class);
         startActivity(intent);
     }
 

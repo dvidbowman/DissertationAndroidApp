@@ -6,6 +6,7 @@ public class User {
     private static String username;
     private static int noImages;
     private static byte[] byteArray;
+    private static byte[] croppedImageByteArray;
 
     // resetUser called upon LogOut
     public static void resetUser() {
@@ -13,6 +14,7 @@ public class User {
         username = "";
         noImages = -1;
         byteArray = null;
+        croppedImageByteArray = null;
     }
 
     public static int getUserId() {
@@ -42,5 +44,9 @@ public class User {
     public static void setUserByteArray(byte[] arr) {
         byteArray = arr;
     }
+
+    public static byte[] getCroppedImageByteArray() { return croppedImageByteArray; }
+
+    public static void setCroppedImageByteArray(byte[] arr) { croppedImageByteArray = arr; }
 
 }
