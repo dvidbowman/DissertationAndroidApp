@@ -44,7 +44,7 @@
     <string name="discard">Discard</string>
     <string name="would_you_like_to_save_this_image">Would you like to save this image?</string>
     <string name="initimagecapture">InitImageCapture</string>
-    <string name="please_tap_on_the_dyed_area_on_the_image">Please tap on the dyed area on the image:</string>
+    <string name="please_tap_on_the_center_of_the_dyed_area_in_the_image">Please tap on the center of the dyed area in the image:</string>
     <string name="get_analysis">Get Analysis</string>
     <string name="next">Next</string>
     <string-array name="months_array">
