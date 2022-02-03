@@ -24,6 +24,7 @@ import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.ByteArrayOutputStream;
@@ -36,6 +37,7 @@ public class ImageAnalysis extends AppCompatActivity {
     private Button discard_btn, save_btn;
     private ImageView preview_imgv, detection_imgv;
     private Bitmap detection;
+    private static Bitmap boundSrc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class ImageAnalysis extends AppCompatActivity {
         try {
             detection = findRectangle(bitmap);
             detection_imgv.setImageBitmap(detection);
+            preview_imgv.setImageBitmap(boundSrc);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -67,19 +70,6 @@ public class ImageAnalysis extends AppCompatActivity {
                 detection.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 User.setCroppedImageByteArray(baos.toByteArray());
                 openGetDyeAreaActivity();
-
-                /*
-                try {
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    detection.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] bytesToSave = baos.toByteArray();
-                    save(bytesToSave);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                 */
-
             }
         });
 
@@ -173,6 +163,7 @@ public class ImageAnalysis extends AppCompatActivity {
                     MatOfPoint2f temp2f = new MatOfPoint2f(contour.toArray());
                     double area = Imgproc.contourArea(contour);
                     approxCurve = new MatOfPoint2f();
+
                     Imgproc.approxPolyDP(temp2f, approxCurve, Imgproc.arcLength(temp2f, true) * 0.02, true);
 
                     if (approxCurve.total() == 4 && area >= maxArea) {
@@ -191,14 +182,22 @@ public class ImageAnalysis extends AppCompatActivity {
                         }
                     }
                 }
+
             }
         }
 
         if (maxId >= 0) {
             Rect rect = Imgproc.boundingRect(contours.get(maxId));
+            Imgproc.rectangle(src, rect.tl(), rect.br(), new Scalar(255, 0, 0,
+                    .8), 4);
             Rect rec = new Rect(rect.x, rect.y, rect.width, rect.height);
             last = first.submat(rec);
         }
+
+        Bitmap boundedSrc;
+        boundedSrc = Bitmap.createBitmap(src.cols(), src.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(src, boundedSrc);
+        boundSrc = boundedSrc;
 
         Bitmap bmp;
         bmp = Bitmap.createBitmap(last.cols(), last.rows(), Bitmap.Config.ARGB_8888);

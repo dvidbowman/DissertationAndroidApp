@@ -67,26 +67,28 @@ public class GetDyeArea extends AppCompatActivity {
 
                 if (bitmapX - 80 < 0) {
                     dyedAreaTopLeftX = 0;
-                } else {
+                    dyedAreaTopRightX = 160;
+                }
+                else if (bitmapX + 80 > srcBitmap.getWidth()) {
+                    dyedAreaTopRightX = srcBitmap.getWidth();
+                    dyedAreaTopLeftX = srcBitmap.getWidth() - 160;
+                }
+                else {
                     dyedAreaTopLeftX = bitmapX - 80;
+                    dyedAreaTopRightX = bitmapX + 80;
                 }
 
                 if (bitmapY - 50 < 0) {
                     dyedAreaTopLeftY = 0;
-                } else {
-                    dyedAreaTopLeftY = bitmapY - 50;
+                    dyedAreaBottomRightY = 100;
                 }
-
-                if (bitmapX + 80 > srcBitmap.getWidth()) {
-                    dyedAreaTopRightX = srcBitmap.getWidth();
-                } else {
-                    dyedAreaTopRightX = bitmapX + 80;
-                }
-
-                if (bitmapY + 80 > srcBitmap.getHeight()) {
+                else if (bitmapY + 50 > srcBitmap.getHeight()) {
                     dyedAreaBottomRightY = srcBitmap.getHeight();
-                } else {
-                    dyedAreaBottomRightY = bitmapY + 80;
+                    dyedAreaTopLeftY = srcBitmap.getHeight() - 100;
+                }
+                else{
+                    dyedAreaTopLeftY = bitmapY - 50;
+                    dyedAreaBottomRightY = bitmapY + 50;
                 }
 
                 screenCoord_textView.setText("Screen touch coordinates : " +
@@ -97,6 +99,9 @@ public class GetDyeArea extends AppCompatActivity {
 
                 Bitmap areaToAnalyse = Bitmap.createBitmap(srcBitmap, dyedAreaTopLeftX, dyedAreaTopLeftY, (dyedAreaTopRightX - dyedAreaTopLeftX), (dyedAreaBottomRightY - dyedAreaTopLeftY));
                 dyedArea_imgv.setImageBitmap(areaToAnalyse);
+
+                //int[] pixelsToAnalyse = {};
+                //areaToAnalyse.getPixels(pixelsToAnalyse, 0, areaToAnalyse.getWidth(), 0, 0, areaToAnalyse.getWidth(), areaToAnalyse.getHeight());
 
                 return true;
             }
