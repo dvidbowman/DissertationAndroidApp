@@ -26,6 +26,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.utils.Converters;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class ImageAnalysis extends AppCompatActivity {
     // Controls
     private Button discard_btn, save_btn;
     private ImageView preview_imgv, detection_imgv;
-    private Bitmap detection;
+    private static Bitmap result;
     private static Bitmap boundSrc;
 
     @Override
@@ -55,8 +56,8 @@ public class ImageAnalysis extends AppCompatActivity {
 
         // Automatic Rectangle Detection and Display of Cropped Image
         try {
-            detection = findRectangle(bitmap);
-            detection_imgv.setImageBitmap(detection);
+            findRectangle(bitmap);
+            detection_imgv.setImageBitmap(result);
             preview_imgv.setImageBitmap(boundSrc);
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,7 +68,7 @@ public class ImageAnalysis extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                detection.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                result.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 User.setCroppedImageByteArray(baos.toByteArray());
                 openGetDyeAreaActivity();
             }
@@ -113,7 +114,7 @@ public class ImageAnalysis extends AppCompatActivity {
 
     // Rectangle Detection Code based on Project by dhananjay-91
     // at https://github.com/dhananjay-91/DetectRectangle
-    private static Bitmap findRectangle(Bitmap image) throws Exception {
+    private static void findRectangle(Bitmap image) throws Exception {
         Mat first = new Mat();
         Mat temp = new Mat();
         Mat src = new Mat();
@@ -134,7 +135,9 @@ public class ImageAnalysis extends AppCompatActivity {
         List<Mat> gray0channel = new ArrayList<>();
         gray0channel.add(gray0);
 
-        MatOfPoint2f approxCurve;
+        MatOfPoint2f approxCurve = new MatOfPoint2f();
+
+        List<Point> source = new ArrayList<Point>();
 
         double maxArea = 0;
         int maxId = -1;
@@ -148,7 +151,6 @@ public class ImageAnalysis extends AppCompatActivity {
                 if (j == 0) {
                     Imgproc.Canny(gray0, gray, 10, 20, 3, true);
                     Imgproc.dilate(gray, gray, new Mat(), new Point(-1, -1), 1);
-
                 }
                 else {
                     Imgproc.adaptiveThreshold(gray0, gray, thresholdLevel,
@@ -160,16 +162,15 @@ public class ImageAnalysis extends AppCompatActivity {
                 Imgproc.findContours(gray, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
 
                 for (MatOfPoint contour : contours) {
-                    MatOfPoint2f temp2f = new MatOfPoint2f(contour.toArray());
+                    MatOfPoint2f temp_contour = new MatOfPoint2f(contour.toArray());
                     double area = Imgproc.contourArea(contour);
-                    approxCurve = new MatOfPoint2f();
+                    MatOfPoint2f approxCurve_temp = new MatOfPoint2f();
+                    Imgproc.approxPolyDP(temp_contour, approxCurve_temp, Imgproc.arcLength(temp_contour, true) * 0.02, true);
 
-                    Imgproc.approxPolyDP(temp2f, approxCurve, Imgproc.arcLength(temp2f, true) * 0.02, true);
-
-                    if (approxCurve.total() == 4 && area >= maxArea) {
+                    if (approxCurve_temp.total() == 4 && area >= maxArea) {
                         double maxCosine = 0;
 
-                        List<Point> curves = approxCurve.toList();
+                        List<Point> curves = approxCurve_temp.toList();
                         for (int k = 2; k < 5; k++) {
                             double cosine = Math.abs(angle(curves.get(k % 4),
                                     curves.get(k - 2), curves.get(k - 1)));
@@ -179,6 +180,7 @@ public class ImageAnalysis extends AppCompatActivity {
                         if (maxCosine < 0.3) {
                             maxArea = area;
                             maxId = contours.indexOf(contour);
+                            approxCurve = approxCurve_temp;
                         }
                     }
                 }
@@ -187,22 +189,40 @@ public class ImageAnalysis extends AppCompatActivity {
         }
 
         if (maxId >= 0) {
-            Rect rect = Imgproc.boundingRect(contours.get(maxId));
-            Imgproc.rectangle(src, rect.tl(), rect.br(), new Scalar(255, 0, 0,
-                    .8), 4);
-            Rect rec = new Rect(rect.x, rect.y, rect.width, rect.height);
-            last = first.submat(rec);
+            double[] temp_double;
+            temp_double = approxCurve.get(0, 0);
+            Point p1 = new Point(temp_double[0], temp_double[1]);
+
+            temp_double = approxCurve.get(1, 0);
+            Point p2 = new Point(temp_double[0], temp_double[1]);
+
+            temp_double = approxCurve.get(2, 0);
+            Point p3 = new Point(temp_double[0], temp_double[1]);
+
+            temp_double = approxCurve.get(3, 0);
+            Point p4 = new Point(temp_double[0], temp_double[1]);
+
+            //List<Point> source = new ArrayList<Point>();
+            source.add(p1);
+            source.add(p2);
+            source.add(p3);
+            source.add(p4);
+
+            Mat startM = Converters.vector_Point2f_to_Mat(source);
+            Mat sourceImage = new Mat();
+            Utils.bitmapToMat(image, sourceImage);
+            result = warp(sourceImage, startM);
+
+            Imgproc.circle(src, p1, 10, new Scalar(255, 0, 0), 3);
+            Imgproc.circle(src, p2, 10, new Scalar(255, 0, 0), 3);
+            Imgproc.circle(src, p3, 10, new Scalar(255, 0, 0), 3);
+            Imgproc.circle(src, p4, 10, new Scalar(255, 0, 0), 3);
         }
 
         Bitmap boundedSrc;
         boundedSrc = Bitmap.createBitmap(src.cols(), src.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(src, boundedSrc);
         boundSrc = boundedSrc;
-
-        Bitmap bmp;
-        bmp = Bitmap.createBitmap(last.cols(), last.rows(), Bitmap.Config.ARGB_8888);
-        Utils.matToBitmap(last, bmp);
-        return bmp;
     }
 
     private static double angle(Point p1, Point p2, Point p0) {
@@ -213,6 +233,34 @@ public class ImageAnalysis extends AppCompatActivity {
         return (dx1 * dx2 + dy1 * dy2)
                 / Math.sqrt((dx1 * dx1 + dy1 * dy1) * (dx2 * dx2 + dy2 * dy2)
                 + 1e-10);
+    }
+
+    private static Bitmap warp(Mat inputMat, Mat startM) {
+        int resultHeight = 350;
+        int resultWidth = 350;
+        Mat outputMat = new Mat(resultWidth, resultHeight, CvType.CV_8UC4);
+
+        Point outTL = new Point(0, 0);
+        Point outBL = new Point(0, resultHeight);
+        Point outBR = new Point(resultWidth, resultHeight);
+        Point outTR = new Point(resultWidth, 0);
+
+        List<Point> dest = new ArrayList<Point>();
+        dest.add(outTL);
+        dest.add(outBL);
+        dest.add(outBR);
+        dest.add(outTR);
+
+        Mat endM = Converters.vector_Point2f_to_Mat(dest);
+        Mat perspectiveTransform = Imgproc.getPerspectiveTransform(startM, endM);
+
+        Imgproc.warpPerspective(inputMat, outputMat, perspectiveTransform,
+                                new Size(resultWidth, resultHeight), Imgproc.INTER_CUBIC);
+
+        Bitmap bmp;
+        bmp = Bitmap.createBitmap(outputMat.cols(), outputMat.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(outputMat, bmp);
+        return bmp;
     }
 
     private void openImageCaptureActivity() {
