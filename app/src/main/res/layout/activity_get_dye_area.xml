@@ -8,25 +8,26 @@
 
     <ImageView
         android:id="@+id/imageView_crop"
-        android:layout_width="333dp"
-        android:layout_height="299dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="260dp"
+        android:layout_height="238dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.287"
+        app:layout_constraintTop_toBottomOf="@+id/textView_SaveSample"
         app:srcCompat="@drawable/ic_launcher_foreground" />
 
     <TextView
         android:id="@+id/textView_dyedArea"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/please_tap_on_the_center_of_the_dyed_area_in_the_image"
+        android:layout_marginTop="20dp"
+        android:text="@string/enter_some_information_about_this_sample"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.383"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView_crop" />
 
     <Button
         android:id="@+id/button_analyseImage"
@@ -35,41 +36,61 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/get_analysis"
+        android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/textView_screenCoord"
+    <EditText
+        android:id="@+id/textBox_SampleTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:layout_marginTop="12dp"
+        android:ems="10"
+        android:hint="@string/title"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintHorizontal_bias="0.139"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_dyedArea" />
 
-    <TextView
-        android:id="@+id/textView_bitmapCoord"
+    <EditText
+        android:id="@+id/textBox_SampleLightLevel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:layout_marginTop="12dp"
+        android:ems="10"
+        android:hint="@string/light_level"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintHorizontal_bias="0.139"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_screenCoord" />
+        app:layout_constraintTop_toBottomOf="@+id/textBox_SampleTitle" />
 
-    <ImageView
-        android:id="@+id/imageView_dyedArea"
-        android:layout_width="184dp"
-        android:layout_height="174dp"
+    <TextView
+        android:id="@+id/textView_SaveSample"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Save this Sample"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.113"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_crop"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_PCO2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="Calculated %CO2: "
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.107"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textBox_SampleLightLevel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

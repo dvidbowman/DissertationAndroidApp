@@ -20,7 +20,7 @@ public class Login extends AppCompatActivity {
     // Controls
     private TextInputEditText username_textField, password_textField;
     private TextView goToSignUp_textView;
-    private Button logIn_btn;
+    private Button logIn_btn, devSkip_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,21 @@ public class Login extends AppCompatActivity {
         username_textField = findViewById(R.id.textField_username);
         password_textField = findViewById(R.id.textField_password);
         logIn_btn = findViewById(R.id.button_Login);
+        devSkip_btn = findViewById(R.id.button_devskip);
         goToSignUp_textView = findViewById(R.id.textView_goToSignUp);
+
+        // OnClickListener for DevSkip button
+        devSkip_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                User.setUserId(0);
+                User.setUserImageNo(0);
+
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         // OnClickListener for GoToSignUp TextView
         goToSignUp_textView.setOnClickListener(new View.OnClickListener() {
@@ -53,6 +67,7 @@ public class Login extends AppCompatActivity {
 
                 if(!username.equals("") && !password.equals("")) {
                     Handler handler = new Handler();
+
                     handler.post(new Runnable() {
                         @Override
                         public void run() {

@@ -59,7 +59,9 @@ public class makeRequest extends Thread {
 
             String UTF8 = "UTF-8", iso = "iso-8859-1";
             URL url = new URL(this.url);
+
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
             httpURLConnection.setRequestMethod(this.httpMethod);
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setDoInput(true);

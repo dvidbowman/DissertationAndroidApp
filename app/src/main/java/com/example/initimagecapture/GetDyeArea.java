@@ -5,19 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class GetDyeArea extends AppCompatActivity {
     // Controls
-    private TextView screenCoord_textView, bitmapCoord_textView;
+    private TextView screenCoord_textView, bitmapCoord_textView, percentCO2_textView;
     private Button analyse_btn;
     private ImageView crop_imgv, dyedArea_imgv;
+
+    Bitmap srcBitmap = BitmapFactory.decodeByteArray(User.getCroppedImageByteArray(), 0, User.getCroppedImageByteArray().length);
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -25,14 +24,18 @@ public class GetDyeArea extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_dye_area);
 
+        percentCO2_textView = (TextView) findViewById(R.id.textView_PCO2);
         analyse_btn = (Button) findViewById(R.id.button_analyseImage);
         crop_imgv = (ImageView) findViewById(R.id.imageView_crop);
+
+        percentCO2_textView.setText("Calculated %CO2: " + String.valueOf(getCO2Percentage()));
+
+        crop_imgv.setImageBitmap(srcBitmap);
+
+        /*  Code for Condensing down Dyed Area
         dyedArea_imgv = (ImageView) findViewById(R.id.imageView_dyedArea);
         screenCoord_textView = (TextView) findViewById(R.id.textView_screenCoord);
-        bitmapCoord_textView = (TextView) findViewById(R.id.textView_bitmapCoord);
-
-        Bitmap srcBitmap = BitmapFactory.decodeByteArray(User.getCroppedImageByteArray(), 0, User.getCroppedImageByteArray().length);
-        crop_imgv.setImageBitmap(srcBitmap);
+        bitmapCoord_textView = (TextView) findViewById(R.id.textView_bitmapCoord);      <-- Add these controls back on the .xml
 
         crop_imgv.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -106,5 +109,33 @@ public class GetDyeArea extends AppCompatActivity {
                 return true;
             }
         });
+
+         */
+    }
+
+    public double getCO2Percentage() {
+        //int colours = srcBitmap.getPixel(srcBitmap.getWidth() / 2, srcBitmap.getHeight() / 2);
+        //double redValue = Color.red(colours);
+        //int greenValue = Color.green(colours);
+        //int blueValue = Color.blue(colours);
+        double redValue = 220.758;
+
+        double redBy255 = redValue / 255;
+        double uncorrectedGamma;
+
+        if (redBy255 > 0.04045) {
+            uncorrectedGamma = Math.pow(((redBy255 + 0.055) / 1.055), 2.4);;
+        }
+        else {
+            uncorrectedGamma = redBy255 / 12.92;
+        }
+
+        double correctedRed = uncorrectedGamma * 255;
+
+        double noToLog = (255 / correctedRed);
+
+        double appAbsorbance = Math.log10(noToLog);     // Excel uses Log10 by default
+
+        return (1.21 - appAbsorbance) / ((appAbsorbance - 0.14) * 16);
     }
 }

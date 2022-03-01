@@ -47,6 +47,13 @@
     <string name="please_tap_on_the_center_of_the_dyed_area_in_the_image">Please tap on the center of the dyed area in the image:</string>
     <string name="get_analysis">Get Analysis</string>
     <string name="next">Next</string>
+    <string name="skip">Skip</string>
+    <string name="light_level">Light Level</string>
+    <string name="title">Title</string>
+    <string name="enter_some_information_about_this_sample">Enter some information about this sample:</string>
+    <string name="original_image">Original Image:</string>
+    <string name="warped_image">Warped Image:</string>
+    <string name="corners_detected">Corners Detected:</string>
     <string-array name="months_array">
         <item>--</item>
         <item>January</item>

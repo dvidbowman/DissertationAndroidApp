@@ -32,23 +32,60 @@
 
     <ImageView
         android:id="@+id/imageView_preview"
-        android:layout_width="272dp"
-        android:layout_height="291dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="228dp"
+        android:layout_height="194dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.041"
+        app:layout_constraintTop_toBottomOf="@+id/textView_OriginalImage"
         app:srcCompat="@drawable/ic_launcher_foreground" />
 
     <ImageView
         android:id="@+id/imageView_detection"
-        android:layout_width="272dp"
-        android:layout_height="291dp"
+        android:layout_width="228dp"
+        android:layout_height="205dp"
         android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_preview"
+        app:layout_constraintTop_toBottomOf="@+id/textView_WarpedImage"
         app:srcCompat="@drawable/ic_launcher_foreground" />
+
+    <TextView
+        android:id="@+id/textView_OriginalImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/corners_detected"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.128"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_ImagePreviews" />
+
+    <TextView
+        android:id="@+id/textView_ImagePreviews"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Image Previews"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.123"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_WarpedImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/warped_image"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.115"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_preview" />
 </androidx.constraintlayout.widget.ConstraintLayout>
