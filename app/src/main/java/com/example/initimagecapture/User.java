@@ -7,6 +7,7 @@ public class User {
     private static int noImages;
     private static byte[] byteArray;
     private static byte[] croppedImageByteArray;
+    private static boolean cameFromCamera;
 
     // resetUser called upon LogOut
     public static void resetUser() {
@@ -48,5 +49,9 @@ public class User {
     public static byte[] getCroppedImageByteArray() { return croppedImageByteArray; }
 
     public static void setCroppedImageByteArray(byte[] arr) { croppedImageByteArray = arr; }
+
+    public static boolean getCameFromCamera() { return cameFromCamera; }
+
+    public static void setCameFromCamera(boolean fromCamera) { cameFromCamera = fromCamera; }
 
 }

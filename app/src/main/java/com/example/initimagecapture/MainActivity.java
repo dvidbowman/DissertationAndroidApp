@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Button settings_btn, analyses_btn, camera_btn, logout_btn;
+    private Button settings_btn, analyses_btn, camera_btn, logout_btn, import_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // OnClickListener for TakeAnImage button
-        camera_btn = (Button) findViewById(R.id.button_TakeImage);
+        camera_btn = (Button) findViewById(R.id.button_takeImage);
         camera_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,6 +81,15 @@ public class MainActivity extends AppCompatActivity {
                         .setNegativeButton("No", dialogClickListener).show();
             }
         });
+
+        // OnClickListener for ImportImage button
+        import_btn = (Button) findViewById(R.id.button_importImage);
+        import_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openImportImageActivity();
+            }
+        });
     }
 
     public void openSettingsActivity() {
@@ -102,6 +111,11 @@ public class MainActivity extends AppCompatActivity {
         User.resetUser();
 
         Intent intent = new Intent(this, Login.class);
+        startActivity(intent);
+    }
+
+    public void openImportImageActivity() {
+        Intent intent = new Intent(this, ImportImage.class);
         startActivity(intent);
     }
 }

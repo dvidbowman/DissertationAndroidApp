@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -114,17 +115,22 @@ public class GetDyeArea extends AppCompatActivity {
     }
 
     public double getCO2Percentage() {
-        //int colours = srcBitmap.getPixel(srcBitmap.getWidth() / 2, srcBitmap.getHeight() / 2);
-        //double redValue = Color.red(colours);
-        //int greenValue = Color.green(colours);
-        //int blueValue = Color.blue(colours);
-        double redValue = 220.758;
+        double redTotal = 0;
 
-        double redBy255 = redValue / 255;
+        for (int y = 0; y < srcBitmap.getHeight(); y++) {           // Currently uses every pixel in the Bitmap
+            for (int x = 0; x < srcBitmap.getWidth(); x++) {
+                int pixelColours = srcBitmap.getPixel(x, y);
+                redTotal += Color.red(pixelColours);
+            }
+        }
+
+        double redAverage = redTotal / (srcBitmap.getWidth() * srcBitmap.getHeight());
+
+        double redBy255 = redAverage / 255;
         double uncorrectedGamma;
 
         if (redBy255 > 0.04045) {
-            uncorrectedGamma = Math.pow(((redBy255 + 0.055) / 1.055), 2.4);;
+            uncorrectedGamma = Math.pow(((redBy255 + 0.055) / 1.055), 2.4);
         }
         else {
             uncorrectedGamma = redBy255 / 12.92;
@@ -136,6 +142,10 @@ public class GetDyeArea extends AppCompatActivity {
 
         double appAbsorbance = Math.log10(noToLog);     // Excel uses Log10 by default
 
-        return (1.21 - appAbsorbance) / ((appAbsorbance - 0.14) * 16);
+        double percentageCO2 = (1.21 - appAbsorbance) / ((appAbsorbance - 0.14) * 16);
+
+        return (double) Math.round(percentageCO2 * 100000d) / 100000d;
+        // 1.21 was the apparent absorbance under 0% CO2
+        // 0.14 was the apparent absorbance under 100% CO2
     }
 }

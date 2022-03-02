@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -166,6 +167,7 @@ public class ImageCapture extends AppCompatActivity {
                         byte[] bytes = new byte[buffer.capacity()];
                         buffer.get(bytes);
                         User.setUserByteArray(bytes);
+                        User.setCameFromCamera(true);
                         openImageAnalysisActivity();
                     } finally {
                         {
@@ -279,6 +281,7 @@ public class ImageCapture extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == REQUEST_CAMERA_PERMISSION) {

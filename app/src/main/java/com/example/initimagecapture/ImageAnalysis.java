@@ -78,7 +78,13 @@ public class ImageAnalysis extends AppCompatActivity {
         discard_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openImageCaptureActivity();
+                if (User.getCameFromCamera()) {
+                    openImageCaptureActivity();
+                }
+                else {
+                    openImportImageActivity();
+                }
+
             }
         });
 
@@ -265,6 +271,11 @@ public class ImageAnalysis extends AppCompatActivity {
 
     private void openImageCaptureActivity() {
         Intent intent = new Intent(this, ImageCapture.class);
+        startActivity(intent);
+    }
+
+    private void openImportImageActivity() {
+        Intent intent = new Intent(this, ImportImage.class);
         startActivity(intent);
     }
 

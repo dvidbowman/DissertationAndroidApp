@@ -20,6 +20,9 @@
         android:theme="@style/Theme.InitImageCapture"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ImportImage"
+            android:exported="false" />
+        <activity
             android:name=".GetDyeArea"
             android:exported="false" />
         <activity
