@@ -56,6 +56,7 @@
     <string name="corners_detected">Corners Detected:</string>
     <string name="sample_capture">Sample Capture</string>
     <string name="import_an_image">Import an Image</string>
+    <string name="reactive_areas">Reactive Areas:</string>
     <string-array name="months_array">
         <item>--</item>
         <item>January</item>

@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -36,9 +37,10 @@ import java.util.List;
 public class ImageAnalysis extends AppCompatActivity {
     // Controls
     private Button discard_btn, save_btn;
-    private ImageView preview_imgv, detection_imgv;
-    private static Bitmap result;
+    private ImageView preview_imgv, detection_imgv, constant_imgv, main_imgv;
+    private static Bitmap initResult, mainResult, constantResult;
     private static Bitmap boundSrc;
+    private static int detectionCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +51,28 @@ public class ImageAnalysis extends AppCompatActivity {
         save_btn = findViewById(R.id.button_saveImage);
         preview_imgv = findViewById(R.id.imageView_preview);
         detection_imgv = findViewById(R.id.imageView_detection);
+        constant_imgv = findViewById(R.id.imageView_constantReact);
+        main_imgv = findViewById(R.id.imageView_mainReact);
 
         // Sets Bitmap of preview ImageView using bytearray of image just taken
         Bitmap bitmap = BitmapFactory.decodeByteArray(User.getUserByteArray(), 0, User.getUserByteArray().length);
         preview_imgv.setImageBitmap(bitmap);
 
-        // Automatic Rectangle Detection and Display of Cropped Image
+        // Automatic Rectangle Detection and Display of Cropped Images
         try {
-            findRectangle(bitmap);
-            detection_imgv.setImageBitmap(result);
-            preview_imgv.setImageBitmap(boundSrc);
+            Bitmap initPass = findRectangle(bitmap);
+            preview_imgv.setImageBitmap(initPass);
+            detection_imgv.setImageBitmap(initResult);
+
+            //
+            Bitmap mainReactBmp = Bitmap.createBitmap(initResult, 0, 250, initResult.getWidth(), initResult.getHeight() - 250);
+            Bitmap mainPass =  findRectangle(mainReactBmp);
+            main_imgv.setImageBitmap(mainResult);
+
+            Bitmap constantReactBmp = Bitmap.createBitmap(initResult, 0, 0, initResult.getWidth(), initResult.getHeight() - 550);
+            Bitmap constantPass = findRectangle(constantReactBmp);
+            constant_imgv.setImageBitmap(constantResult);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -68,7 +82,7 @@ public class ImageAnalysis extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                result.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                mainResult.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 User.setCroppedImageByteArray(baos.toByteArray());
                 openGetDyeAreaActivity();
             }
@@ -120,11 +134,11 @@ public class ImageAnalysis extends AppCompatActivity {
 
     // Rectangle Detection Code based on Project by dhananjay-91
     // at https://github.com/dhananjay-91/DetectRectangle
-    private static void findRectangle(Bitmap image) throws Exception {
+    private static Bitmap findRectangle(Bitmap image) throws Exception {
         Mat first = new Mat();
         Mat temp = new Mat();
         Mat src = new Mat();
-        Mat last = new Mat();
+
         Utils.bitmapToMat(image, temp);
         Utils.bitmapToMat(image, first);
 
@@ -207,8 +221,7 @@ public class ImageAnalysis extends AppCompatActivity {
 
             temp_double = approxCurve.get(3, 0);
             Point p4 = new Point(temp_double[0], temp_double[1]);
-
-            //List<Point> source = new ArrayList<Point>();
+            
             source.add(p1);
             source.add(p2);
             source.add(p3);
@@ -217,7 +230,18 @@ public class ImageAnalysis extends AppCompatActivity {
             Mat startM = Converters.vector_Point2f_to_Mat(source);
             Mat sourceImage = new Mat();
             Utils.bitmapToMat(image, sourceImage);
-            result = warp(sourceImage, startM);
+
+            if (detectionCounter == 0) {
+                initResult = warp(sourceImage, startM);
+            }
+            else if (detectionCounter == 1) {
+                mainResult = warp(sourceImage, startM);
+            }
+            else {
+                constantResult = warp(sourceImage, startM);
+            }
+
+            detectionCounter++;
 
             Imgproc.circle(src, p1, 10, new Scalar(255, 0, 0), 3);
             Imgproc.circle(src, p2, 10, new Scalar(255, 0, 0), 3);
@@ -228,7 +252,7 @@ public class ImageAnalysis extends AppCompatActivity {
         Bitmap boundedSrc;
         boundedSrc = Bitmap.createBitmap(src.cols(), src.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(src, boundedSrc);
-        boundSrc = boundedSrc;
+        return boundedSrc;
     }
 
     private static double angle(Point p1, Point p2, Point p0) {
@@ -242,8 +266,18 @@ public class ImageAnalysis extends AppCompatActivity {
     }
 
     private static Bitmap warp(Mat inputMat, Mat startM) {
-        int resultHeight = 350;
-        int resultWidth = 350;
+        int resultHeight;
+        int resultWidth;
+
+        if (detectionCounter == 0) {
+            resultHeight = 800;
+            resultWidth = 500;
+        }
+        else {
+            resultHeight = 200;
+            resultWidth = 200;
+        }
+
         Mat outputMat = new Mat(resultWidth, resultHeight, CvType.CV_8UC4);
 
         Point outTL = new Point(0, 0);
