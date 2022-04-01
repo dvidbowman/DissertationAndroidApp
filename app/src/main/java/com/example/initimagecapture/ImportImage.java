@@ -75,9 +75,9 @@ public class ImportImage extends AppCompatActivity {
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                importedImage_imgv.invalidate();
                 BitmapDrawable drawable = (BitmapDrawable) importedImage_imgv.getDrawable();
                 Bitmap importedBitmap = drawable.getBitmap();
+                importedImage_imgv.invalidate();
 
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 importedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);

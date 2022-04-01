@@ -11,6 +11,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -38,9 +39,12 @@ public class ImageAnalysis extends AppCompatActivity {
     // Controls
     private Button discard_btn, save_btn;
     private ImageView preview_imgv, detection_imgv, constant_imgv, main_imgv;
-    private static Bitmap initResult, mainResult, constantResult;
+    private static Bitmap initResult, mainResult, constantResult, mainCropped;
     private static Bitmap boundSrc;
     private static int detectionCounter = 0;
+
+    // private static String pointOneCoords, pointTwoCoords;
+    // private TextView pointOne_txtv, pointTwo_txtv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,8 @@ public class ImageAnalysis extends AppCompatActivity {
         detection_imgv = findViewById(R.id.imageView_detection);
         constant_imgv = findViewById(R.id.imageView_constantReact);
         main_imgv = findViewById(R.id.imageView_mainReact);
+        // pointOne_txtv = findViewById(R.id.textView_pointone);
+        // pointTwo_txtv = findViewById(R.id.textView_pointtwo);
 
         // Sets Bitmap of preview ImageView using bytearray of image just taken
         Bitmap bitmap = BitmapFactory.decodeByteArray(User.getUserByteArray(), 0, User.getUserByteArray().length);
@@ -67,7 +73,10 @@ public class ImageAnalysis extends AppCompatActivity {
             //
             Bitmap mainReactBmp = Bitmap.createBitmap(initResult, 0, 250, initResult.getWidth(), initResult.getHeight() - 250);
             Bitmap mainPass =  findRectangle(mainReactBmp);
+            // pointOne_txtv.setText(pointOneCoords);
+            // pointTwo_txtv.setText(pointTwoCoords);
             main_imgv.setImageBitmap(mainResult);
+            mainCropped = Bitmap.createBitmap(mainResult, (mainResult.getWidth() / 3), (mainResult.getHeight() / 3), ((mainResult.getWidth() / 3) * 2), ((mainResult.getHeight() / 3) * 2));
 
             Bitmap constantReactBmp = Bitmap.createBitmap(initResult, 0, 0, initResult.getWidth(), initResult.getHeight() - 550);
             Bitmap constantPass = findRectangle(constantReactBmp);
@@ -82,7 +91,7 @@ public class ImageAnalysis extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                mainResult.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                mainCropped.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 User.setCroppedImageByteArray(baos.toByteArray());
                 openGetDyeAreaActivity();
             }
@@ -210,22 +219,63 @@ public class ImageAnalysis extends AppCompatActivity {
 
         if (maxId >= 0) {
             double[] temp_double;
+            List<Point> unorderedPoints = new ArrayList<Point>();
             temp_double = approxCurve.get(0, 0);
-            Point p1 = new Point(temp_double[0], temp_double[1]);
+            Point unorderedP1 = new Point(temp_double[0], temp_double[1]);
 
             temp_double = approxCurve.get(1, 0);
-            Point p2 = new Point(temp_double[0], temp_double[1]);
+            Point unorderedP2 = new Point(temp_double[0], temp_double[1]);
 
             temp_double = approxCurve.get(2, 0);
-            Point p3 = new Point(temp_double[0], temp_double[1]);
+            Point unorderedP3 = new Point(temp_double[0], temp_double[1]);
 
             temp_double = approxCurve.get(3, 0);
-            Point p4 = new Point(temp_double[0], temp_double[1]);
-            
-            source.add(p1);
-            source.add(p2);
-            source.add(p3);
-            source.add(p4);
+            Point unorderedP4 = new Point(temp_double[0], temp_double[1]);
+
+            unorderedPoints.add(unorderedP1);
+            unorderedPoints.add(unorderedP2);
+            unorderedPoints.add(unorderedP3);
+            unorderedPoints.add(unorderedP4);
+
+            Point P1 = unorderedP1;
+            // Point 1 will have the lowest x + y value
+            for (Point p : unorderedPoints) {
+                if ((p.x + p.y) < (P1.x + P1.y)) {
+                    P1 = p;
+                }
+            }
+
+            Point P4 = unorderedP4;
+            // Point 4 will have the greatest x + y value
+            for (Point p : unorderedPoints) {
+                if ((p.x + p.y) > (P4.x + P4.y)) {
+                    P4 = p;
+                }
+            }
+
+            Point P2 = unorderedP2;
+            // Point 2 will be the point with the lowest y value that also has an x greater than Point 1, and a y less than Point 4
+            for (Point p : unorderedPoints) {
+                if (((p.x > P1.x) && (p.y < P4.y)) && (p.y < P2.y)) {
+                    P2 = p;
+                }
+            }
+
+            // Point 3 will be the point with the highest y value that also has a y greater than Point 1, and an x less than Point 4
+            Point P3 = unorderedP3;
+            for (Point p : unorderedPoints) {
+                if (((p.x < P4.x) && (p.y > P1.y)) && p.y > P2.y) {
+                    P3 = p;
+                }
+            }
+
+            // pointOneCoords = "Ordered P1 X: " + P1.x + ", Y: " + P1.y;
+            // pointTwoCoords = "Unordered P2 X: " + unorderedP2.x + ", Y: " + unorderedP2.y;
+
+            source.add(P1);
+            source.add(P3);
+            source.add(P4);
+            source.add(P2);
 
             Mat startM = Converters.vector_Point2f_to_Mat(source);
             Mat sourceImage = new Mat();
@@ -243,10 +293,15 @@ public class ImageAnalysis extends AppCompatActivity {
 
             detectionCounter++;
 
-            Imgproc.circle(src, p1, 10, new Scalar(255, 0, 0), 3);
-            Imgproc.circle(src, p2, 10, new Scalar(255, 0, 0), 3);
-            Imgproc.circle(src, p3, 10, new Scalar(255, 0, 0), 3);
-            Imgproc.circle(src, p4, 10, new Scalar(255, 0, 0), 3);
+            Imgproc.circle(src, unorderedP1, 15, new Scalar(255, 0, 0), 3);
+            Imgproc.circle(src, unorderedP2, 30, new Scalar(255, 0, 0), 3);
+            Imgproc.circle(src, unorderedP3, 50, new Scalar(255, 0, 0), 3);
+            Imgproc.circle(src, unorderedP4, 70, new Scalar(255, 0, 0), 3);
+
+            Imgproc.circle(src, P1, 10, new Scalar(0, 0, 255), 3);
+            Imgproc.circle(src, P2, 20, new Scalar(0, 0, 255), 3);
+            Imgproc.circle(src, P3, 40, new Scalar(0, 0, 255), 3);
+            Imgproc.circle(src, P4, 60, new Scalar(0, 0, 255), 3);
         }
 
         Bitmap boundedSrc;
