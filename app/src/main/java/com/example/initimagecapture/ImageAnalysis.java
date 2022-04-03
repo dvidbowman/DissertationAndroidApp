@@ -2,6 +2,7 @@ package com.example.initimagecapture;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -39,7 +40,7 @@ public class ImageAnalysis extends AppCompatActivity {
     // Controls
     private Button discard_btn, save_btn;
     private ImageView preview_imgv, detection_imgv, constant_imgv, main_imgv;
-    private static Bitmap initResult, mainResult, constantResult, mainCropped;
+    private static Bitmap initResult, mainResult, constantResult, mainCropped, constantCropped;
     private static Bitmap boundSrc;
     private static int detectionCounter = 0;
 
@@ -71,16 +72,25 @@ public class ImageAnalysis extends AppCompatActivity {
             detection_imgv.setImageBitmap(initResult);
 
             //
-            Bitmap mainReactBmp = Bitmap.createBitmap(initResult, 0, 250, initResult.getWidth(), initResult.getHeight() - 250);
+            Bitmap mainReactBmp = Bitmap.createBitmap(initResult, 10, 250, initResult.getWidth() - 10, initResult.getHeight() - 250);
             Bitmap mainPass =  findRectangle(mainReactBmp);
             // pointOne_txtv.setText(pointOneCoords);
             // pointTwo_txtv.setText(pointTwoCoords);
             main_imgv.setImageBitmap(mainResult);
-            mainCropped = Bitmap.createBitmap(mainResult, (mainResult.getWidth() / 3), (mainResult.getHeight() / 3), ((mainResult.getWidth() / 3) * 2), ((mainResult.getHeight() / 3) * 2));
+            int reactiveCropStartX = mainResult.getWidth() / 4;
+            int reactiveCropStartY = mainResult.getHeight() / 4;
+            int reactiveCropWidth = mainResult.getWidth() / 2;
+            int reactiveCropHeight = mainResult.getHeight() / 2;
+            mainCropped = Bitmap.createBitmap(mainResult, reactiveCropStartX, reactiveCropStartY, reactiveCropWidth, reactiveCropHeight);
 
-            Bitmap constantReactBmp = Bitmap.createBitmap(initResult, 0, 0, initResult.getWidth(), initResult.getHeight() - 550);
+            Bitmap constantReactBmp = Bitmap.createBitmap(initResult, 10, 10, initResult.getWidth() - 20, initResult.getHeight() - 535);
             Bitmap constantPass = findRectangle(constantReactBmp);
             constant_imgv.setImageBitmap(constantResult);
+            int nonreactiveCropStartX = constantResult.getWidth() / 4;
+            int nonreactiveCropStartY = constantResult.getHeight() / 4;
+            int nonreactiveCropWidth = constantResult.getWidth() / 2;
+            int nonreactiveCropHeight = constantResult.getHeight() / 2;
+            constantCropped = Bitmap.createBitmap(constantResult, nonreactiveCropStartX, nonreactiveCropStartY, nonreactiveCropWidth, nonreactiveCropHeight);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -90,9 +100,14 @@ public class ImageAnalysis extends AppCompatActivity {
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                mainCropped.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                User.setCroppedImageByteArray(baos.toByteArray());
+                ByteArrayOutputStream reactivebaos = new ByteArrayOutputStream();
+                mainCropped.compress(Bitmap.CompressFormat.JPEG, 100, reactivebaos);
+                User.setCroppedReactiveByteArray(reactivebaos.toByteArray());
+
+                ByteArrayOutputStream nonreactivebaos = new ByteArrayOutputStream();
+                constantCropped.compress(Bitmap.CompressFormat.JPEG, 100, nonreactivebaos);
+                User.setCroppedNonReactiveByteArray(nonreactivebaos.toByteArray());
+
                 openGetDyeAreaActivity();
             }
         });
@@ -101,6 +116,8 @@ public class ImageAnalysis extends AppCompatActivity {
         discard_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                detectionCounter = 0;
+
                 if (User.getCameFromCamera()) {
                     openImageCaptureActivity();
                 }
@@ -240,33 +257,27 @@ public class ImageAnalysis extends AppCompatActivity {
             Point P1 = unorderedP1;
             // Point 1 will have the lowest x + y value
             for (Point p : unorderedPoints) {
-                if ((p.x + p.y) < (P1.x + P1.y)) {
+                if ((p.x + p.y) <= (P1.x + P1.y)) {
                     P1 = p;
                 }
             }
+            unorderedPoints.remove(P1);     // Object referencing is used to remove the now known Point 1 from list of possible points
 
             Point P4 = unorderedP4;
             // Point 4 will have the greatest x + y value
             for (Point p : unorderedPoints) {
-                if ((p.x + p.y) > (P4.x + P4.y)) {
+                if ((p.x + p.y) >= (P4.x + P4.y)) {
                     P4 = p;
                 }
             }
+            unorderedPoints.remove(P4);     // Known Point 4 is removed
 
-            Point P2 = unorderedP2;
-            // Point 2 will be the point with the lowest y value that also has an x greater than Point 1, and a y less than Point 4
-            for (Point p : unorderedPoints) {
-                if (((p.x > P1.x) && (p.y < P4.y)) && (p.y < P2.y)) {
-                    P2 = p;
-                }
-            }
+            Point P2 = unorderedPoints.get(0);  // Last two points are assigned
+            Point P3 = unorderedPoints.get(1);
 
-            // Point 3 will be the point with the highest y value that also has a y greater than Point 1, and an x less than Point 4
-            Point P3 = unorderedP3;
-            for (Point p : unorderedPoints) {
-                if (((p.x < P4.x) && (p.y > P1.y)) && p.y > P2.y) {
-                    P3 = p;
-                }
+            if (P2.x < P3.x) {                  // Point 2 always has larger x than Point 3, so if it turns out to be lower
+                P2 = unorderedPoints.get(1);    // the values are swapped around
+                P3 = unorderedPoints.get(0);
             }
 
             // pointOneCoords = "Ordered P1 X: " + P1.x + ", Y: " + P1.y;

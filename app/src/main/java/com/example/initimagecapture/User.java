@@ -6,7 +6,8 @@ public class User {
     private static String username;
     private static int noImages;
     private static byte[] byteArray;
-    private static byte[] croppedImageByteArray;
+    private static byte[] croppedReactiveByteArray;
+    private static byte[] croppedNonReactiveByteArray;
     private static boolean cameFromCamera;
 
     // resetUser called upon LogOut
@@ -15,7 +16,8 @@ public class User {
         username = "";
         noImages = -1;
         byteArray = null;
-        croppedImageByteArray = null;
+        croppedReactiveByteArray = null;
+        croppedNonReactiveByteArray = null;
     }
 
     public static int getUserId() {
@@ -46,9 +48,13 @@ public class User {
         byteArray = arr;
     }
 
-    public static byte[] getCroppedImageByteArray() { return croppedImageByteArray; }
+    public static byte[] getCroppedReactiveByteArray() { return croppedReactiveByteArray; }
 
-    public static void setCroppedImageByteArray(byte[] arr) { croppedImageByteArray = arr; }
+    public static void setCroppedReactiveByteArray(byte[] arr) { croppedReactiveByteArray = arr; }
+
+    public static byte[] getCroppedNonReactiveByteArray() { return croppedNonReactiveByteArray; }
+
+    public static void setCroppedNonReactiveByteArray(byte[] arr) { croppedNonReactiveByteArray = arr; }
 
     public static boolean getCameFromCamera() { return cameFromCamera; }
 

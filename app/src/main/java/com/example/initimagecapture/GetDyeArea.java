@@ -13,11 +13,12 @@ import android.widget.TextView;
 
 public class GetDyeArea extends AppCompatActivity {
     // Controls
-    private TextView screenCoord_textView, bitmapCoord_textView, percentCO2_textView;
+    private TextView screenCoord_txtv, bitmapCoord_txtv, reactivePCO2_txtv, nonreactivePCO2_txtv;
     private Button analyse_btn;
-    private ImageView crop_imgv, dyedArea_imgv;
+    private ImageView croppedReactive_imgv, dyedArea_imgv;
 
-    Bitmap srcBitmap = BitmapFactory.decodeByteArray(User.getCroppedImageByteArray(), 0, User.getCroppedImageByteArray().length);
+    Bitmap reactiveBitmap = BitmapFactory.decodeByteArray(User.getCroppedReactiveByteArray(), 0, User.getCroppedReactiveByteArray().length);
+    Bitmap nonreactiveBitmap = BitmapFactory.decodeByteArray(User.getCroppedNonReactiveByteArray(), 0, User.getCroppedNonReactiveByteArray().length);
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -25,13 +26,17 @@ public class GetDyeArea extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_dye_area);
 
-        percentCO2_textView = (TextView) findViewById(R.id.textView_PCO2);
+        reactivePCO2_txtv = (TextView) findViewById(R.id.textView_reactivePCO2);
+        nonreactivePCO2_txtv = (TextView) findViewById(R.id.textView_nonreactivePCO2);
         analyse_btn = (Button) findViewById(R.id.button_analyseImage);
-        crop_imgv = (ImageView) findViewById(R.id.imageView_crop);
+        croppedReactive_imgv = (ImageView) findViewById(R.id.imageView_crop);
 
-        percentCO2_textView.setText("Calculated %CO2: " + String.valueOf(getCO2Percentage()));
 
-        crop_imgv.setImageBitmap(srcBitmap);
+        reactivePCO2_txtv.setText("Reactive Calculated %CO2: " + String.valueOf(getCO2Percentage(reactiveBitmap)));
+        nonreactivePCO2_txtv.setText("Non-reactive Calculated %CO2: " + String.valueOf(getCO2Percentage(nonreactiveBitmap)));
+
+
+        croppedReactive_imgv.setImageBitmap(reactiveBitmap);
 
         /*  Code for Condensing down Dyed Area
         dyedArea_imgv = (ImageView) findViewById(R.id.imageView_dyedArea);
@@ -114,17 +119,17 @@ public class GetDyeArea extends AppCompatActivity {
          */
     }
 
-    public double getCO2Percentage() {
+    public double getCO2Percentage(Bitmap bmp) {
         double redTotal = 0;
 
-        for (int y = 0; y < srcBitmap.getHeight(); y++) {           // Currently uses every pixel in the Bitmap
-            for (int x = 0; x < srcBitmap.getWidth(); x++) {
-                int pixelColours = srcBitmap.getPixel(x, y);
+        for (int y = 0; y < bmp.getHeight(); y++) {           // Currently uses every pixel in the Bitmap
+            for (int x = 0; x < bmp.getWidth(); x++) {
+                int pixelColours = bmp.getPixel(x, y);
                 redTotal += Color.red(pixelColours);
             }
         }
 
-        double redAverage = redTotal / (srcBitmap.getWidth() * srcBitmap.getHeight());
+        double redAverage = redTotal / (bmp.getWidth() * bmp.getHeight());
 
         double redBy255 = redAverage / 255;
         double uncorrectedGamma;

@@ -93,10 +93,12 @@ public class ImportImage extends AppCompatActivity {
     public void openMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void openImageAnalysisActivity() {
         Intent intent = new Intent(this, ImageAnalysis.class);
         startActivity(intent);
+        finish();
     }
 }
