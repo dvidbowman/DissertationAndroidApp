@@ -2,17 +2,15 @@ package com.example.initimagecapture;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -25,7 +23,6 @@ import org.opencv.core.MatOfInt;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -38,14 +35,11 @@ import java.util.List;
 
 public class ImageAnalysis extends AppCompatActivity {
     // Controls
-    private Button discard_btn, save_btn;
+    private Button discard_btn, next_btn;
     private ImageView preview_imgv, detection_imgv, constant_imgv, main_imgv;
-    private static Bitmap initResult, mainResult, constantResult, mainCropped, constantCropped;
-    private static Bitmap boundSrc;
+    private RadioButton saveText_rbtn;
+    private static Bitmap initResult, mainResult, constantResult, mainCropped, constantCropped, boundSrc;
     private static int detectionCounter = 0;
-
-    // private static String pointOneCoords, pointTwoCoords;
-    // private TextView pointOne_txtv, pointTwo_txtv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +47,12 @@ public class ImageAnalysis extends AppCompatActivity {
         setContentView(R.layout.activity_image_analysis);
 
         discard_btn = findViewById(R.id.button_discardImage);
-        save_btn = findViewById(R.id.button_saveImage);
+        next_btn = findViewById(R.id.button_nextImageAnalysis);
         preview_imgv = findViewById(R.id.imageView_preview);
         detection_imgv = findViewById(R.id.imageView_detection);
         constant_imgv = findViewById(R.id.imageView_constantReact);
         main_imgv = findViewById(R.id.imageView_mainReact);
-        // pointOne_txtv = findViewById(R.id.textView_pointone);
-        // pointTwo_txtv = findViewById(R.id.textView_pointtwo);
+        saveText_rbtn = findViewById(R.id.radioButton_saveValues);
 
         // Sets Bitmap of preview ImageView using bytearray of image just taken
         Bitmap bitmap = BitmapFactory.decodeByteArray(User.getUserByteArray(), 0, User.getUserByteArray().length);
@@ -74,8 +67,6 @@ public class ImageAnalysis extends AppCompatActivity {
             //
             Bitmap mainReactBmp = Bitmap.createBitmap(initResult, 10, 250, initResult.getWidth() - 10, initResult.getHeight() - 250);
             Bitmap mainPass =  findRectangle(mainReactBmp);
-            // pointOne_txtv.setText(pointOneCoords);
-            // pointTwo_txtv.setText(pointTwoCoords);
             main_imgv.setImageBitmap(mainResult);
             int reactiveCropStartX = mainResult.getWidth() / 4;
             int reactiveCropStartY = mainResult.getHeight() / 4;
@@ -96,8 +87,8 @@ public class ImageAnalysis extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // OnClickListener for Save button
-        save_btn.setOnClickListener(new View.OnClickListener() {
+        // OnClickListener for Next button
+        next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ByteArrayOutputStream reactivebaos = new ByteArrayOutputStream();
@@ -107,6 +98,8 @@ public class ImageAnalysis extends AppCompatActivity {
                 ByteArrayOutputStream nonreactivebaos = new ByteArrayOutputStream();
                 constantCropped.compress(Bitmap.CompressFormat.JPEG, 100, nonreactivebaos);
                 User.setCroppedNonReactiveByteArray(nonreactivebaos.toByteArray());
+
+                User.setSaveRGBValues(saveText_rbtn.isChecked());
 
                 openGetDyeAreaActivity();
             }

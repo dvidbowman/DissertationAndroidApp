@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/djbow/AndroidStudioProjects/InitImageCapture/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3828125" />
         <entry key="..\:/Users/djbow/AndroidStudioProjects/InitImageCapture/app/src/main/res/layout/activity_analyses.xml" value="0.33" />
         <entry key="..\:/Users/djbow/AndroidStudioProjects/InitImageCapture/app/src/main/res/layout/activity_get_dye_area.xml" value="0.35104166666666664" />
         <entry key="..\:/Users/djbow/AndroidStudioProjects/InitImageCapture/app/src/main/res/layout/activity_image_analysis.xml" value="0.33" />
@@ -10,7 +11,7 @@
         <entry key="..\:/Users/djbow/AndroidStudioProjects/InitImageCapture/app/src/main/res/layout/activity_imageanalysis.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/djbow/AndroidStudioProjects/InitImageCapture/app/src/main/res/layout/activity_import_image.xml" value="0.278125" />
         <entry key="..\:/Users/djbow/AndroidStudioProjects/InitImageCapture/app/src/main/res/layout/activity_login.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/djbow/AndroidStudioProjects/InitImageCapture/app/src/main/res/layout/activity_main.xml" value="0.35260416666666666" />
+        <entry key="..\:/Users/djbow/AndroidStudioProjects/InitImageCapture/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/djbow/AndroidStudioProjects/InitImageCapture/app/src/main/res/layout/activity_settings.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/djbow/AndroidStudioProjects/InitImageCapture/app/src/main/res/layout/activity_sign_up.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/djbow/AndroidStudioProjects/InitImageCapture/app/src/main/res/layout/analyses_row.xml" value="0.5" />

@@ -60,6 +60,8 @@
     <string name="save_this_sample">Save this Sample</string>
     <string name="reactive_calculated_co2">Reactive Calculated %CO2:</string>
     <string name="non_reactive_calculated_co2">Non-reactive Calculated %CO2:</string>
+    <string name="smart_wound_dressing_analysis">Smart Wound Dressing Analysis</string>
+    <string name="open_gallery">Open Gallery</string>
     <string-array name="months_array">
         <item>--</item>
         <item>January</item>

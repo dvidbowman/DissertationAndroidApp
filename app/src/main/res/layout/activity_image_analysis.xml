@@ -7,11 +7,12 @@
     tools:context=".ImageAnalysis">
 
     <Button
-        android:id="@+id/button_saveImage"
+        android:id="@+id/button_nextImageAnalysis"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
+        android:backgroundTint="#D32EA9DF"
         android:text="@string/next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,6 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
+        android:backgroundTint="#D32EA9DF"
         android:text="@string/discard"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -120,5 +122,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_ReactiveAreas"
         app:srcCompat="@drawable/ic_launcher_foreground" />
+
+    <RadioButton
+        android:id="@+id/radioButton_saveValues"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:minHeight="48dp"
+        android:text="Save RGB Values?"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_nextImageAnalysis"
+        app:layout_constraintHorizontal_bias="0.433"
+        app:layout_constraintStart_toEndOf="@+id/button_discardImage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

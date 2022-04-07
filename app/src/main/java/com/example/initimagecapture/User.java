@@ -9,6 +9,7 @@ public class User {
     private static byte[] croppedReactiveByteArray;
     private static byte[] croppedNonReactiveByteArray;
     private static boolean cameFromCamera;
+    private static boolean saveRGBValues;
 
     // resetUser called upon LogOut
     public static void resetUser() {
@@ -59,5 +60,9 @@ public class User {
     public static boolean getCameFromCamera() { return cameFromCamera; }
 
     public static void setCameFromCamera(boolean fromCamera) { cameFromCamera = fromCamera; }
+
+    public static boolean getSaveRGBValues() { return saveRGBValues; }
+
+    public static void setSaveRGBValues(boolean saveValues) { saveRGBValues = saveValues; }
 
 }

@@ -15,6 +15,7 @@
         android:layout_marginEnd="50dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:hint="@string/full_name1"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createAccount" />
@@ -28,6 +29,7 @@
         android:layout_marginEnd="50dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:hint="@string/password"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textField_username" />
@@ -38,6 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
+        android:backgroundTint="#D32EA9DF"
         android:text="@string/create_account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,6 +55,7 @@
         android:layout_marginEnd="50dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:hint="@string/username"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textField_fullName" />
