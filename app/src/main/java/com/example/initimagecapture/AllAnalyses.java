@@ -5,29 +5,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 
 import org.json.*;
 
-public class Analyses extends AppCompatActivity {
+public class AllAnalyses extends AppCompatActivity {
     // Controls
     private Button back_btn, filter_btn;
     private RecyclerView images_recyclerView;
@@ -40,7 +31,7 @@ public class Analyses extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_analyses);
+        setContentView(R.layout.activity_all_analyses);
         years_spinner = findViewById(R.id.spinner_years);
         months_spinner = findViewById(R.id.spinner_months);
 

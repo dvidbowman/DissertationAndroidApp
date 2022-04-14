@@ -4,29 +4,22 @@ package com.example.initimagecapture;
 // Following the video tutorial at https://www.youtube.com/watch?v=oPu42I0HSi4
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Camera;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.provider.MediaStore;
 import android.hardware.camera2.*;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -34,24 +27,12 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 public class ImageCapture extends AppCompatActivity {
     // Controls
@@ -168,7 +149,7 @@ public class ImageCapture extends AppCompatActivity {
                         buffer.get(bytes);
                         User.setUserByteArray(bytes);
                         User.setCameFromCamera(true);
-                        openImageAnalysisActivity();
+                        openImageManipulationActivity();
                     } finally {
                         {
                             if(image != null)
@@ -208,11 +189,6 @@ public class ImageCapture extends AppCompatActivity {
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
-    }
-
-    private void openImageAnalysisActivity() {
-        Intent intent = new Intent(this, ImageAnalysis.class);
-        startActivity(intent);
     }
 
     private void createCameraPreview() {
@@ -352,6 +328,11 @@ public class ImageCapture extends AppCompatActivity {
 
     public void openMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    private void openImageManipulationActivity() {
+        Intent intent = new Intent(this, ImageManipulation.class);
         startActivity(intent);
     }
 

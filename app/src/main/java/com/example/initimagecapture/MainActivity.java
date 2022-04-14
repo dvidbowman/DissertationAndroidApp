@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         analyses_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openAnalysesActivity();
+                openAllAnalysesActivity();
             }
         });
 
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         camera_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openCameraActivity();
+                openImageCaptureActivity();
             }
         });
 
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         import_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openImportImageActivity();
+                openImageImportActivity();
             }
         });
     }
@@ -97,12 +97,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void openAnalysesActivity() {
-        Intent intent = new Intent(this, Analyses.class);
+    public void openAllAnalysesActivity() {
+        Intent intent = new Intent(this, AllAnalyses.class);
         startActivity(intent);
     }
 
-    public void openCameraActivity() {
+    public void openImageCaptureActivity() {
         Intent intent = new Intent(this, ImageCapture.class);
         startActivity(intent);
     }
@@ -114,8 +114,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void openImportImageActivity() {
-        Intent intent = new Intent(this, ImportImage.class);
+    public void openImageImportActivity() {
+        Intent intent = new Intent(this, ImageImport.class);
         startActivity(intent);
     }
 }

@@ -18,14 +18,14 @@ import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
 
-public class ImportImage extends AppCompatActivity {
+public class ImageImport extends AppCompatActivity {
     private Button back_btn, chooseImage_btn, next_btn;
     private ImageView importedImage_imgv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_import_image);
+        setContentView(R.layout.activity_image_import);
 
         importedImage_imgv = (ImageView) findViewById(R.id.imageView_importedImage);
 
@@ -83,7 +83,7 @@ public class ImportImage extends AppCompatActivity {
                 importedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 User.setUserByteArray(stream.toByteArray());
                 User.setCameFromCamera(false);
-                openImageAnalysisActivity();
+                openImageManipulationActivity();
             }
         });
         next_btn.setVisibility(View.INVISIBLE);
@@ -96,8 +96,8 @@ public class ImportImage extends AppCompatActivity {
         finish();
     }
 
-    public void openImageAnalysisActivity() {
-        Intent intent = new Intent(this, ImageAnalysis.class);
+    public void openImageManipulationActivity() {
+        Intent intent = new Intent(this, ImageManipulation.class);
         startActivity(intent);
         finish();
     }

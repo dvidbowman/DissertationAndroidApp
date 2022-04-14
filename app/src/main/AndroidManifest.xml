@@ -21,15 +21,15 @@
         android:theme="@style/Theme.InitImageCapture"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ImportImage"
+            android:name=".ImageImport"
             android:exported="false"
             android:theme="@style/Theme.Design.Light.NoActionBar" />
         <activity
-            android:name=".GetDyeArea"
+            android:name=".CurrentAnalysis"
             android:exported="false"
             android:theme="@style/Theme.Design.Light.NoActionBar" />
         <activity
-            android:name=".ImageAnalysis"
+            android:name=".ImageManipulation"
             android:exported="false"
             android:theme="@style/Theme.Design.Light.NoActionBar" />
         <activity
@@ -51,7 +51,7 @@
             android:exported="false"
             android:theme="@style/Theme.Design.Light.NoActionBar" />
         <activity
-            android:name=".Analyses"
+            android:name=".AllAnalyses"
             android:exported="false"
             android:theme="@style/Theme.Design.Light.NoActionBar" />
         <activity

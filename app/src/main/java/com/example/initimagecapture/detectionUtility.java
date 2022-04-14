@@ -1,20 +1,7 @@
 package com.example.initimagecapture;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -28,132 +15,14 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.utils.Converters;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImageAnalysis extends AppCompatActivity {
-    // Controls
-    private Button discard_btn, next_btn;
-    private ImageView preview_imgv, detection_imgv, constant_imgv, main_imgv;
-    private RadioButton saveText_rbtn;
-    private static Bitmap initResult, mainResult, constantResult, mainCropped, constantCropped, boundSrc;
-    private static int detectionCounter = 0;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_analysis);
-
-        discard_btn = findViewById(R.id.button_discardImage);
-        next_btn = findViewById(R.id.button_nextImageAnalysis);
-        preview_imgv = findViewById(R.id.imageView_preview);
-        detection_imgv = findViewById(R.id.imageView_detection);
-        constant_imgv = findViewById(R.id.imageView_constantReact);
-        main_imgv = findViewById(R.id.imageView_mainReact);
-        saveText_rbtn = findViewById(R.id.radioButton_saveValues);
-
-        // Sets Bitmap of preview ImageView using bytearray of image just taken
-        Bitmap bitmap = BitmapFactory.decodeByteArray(User.getUserByteArray(), 0, User.getUserByteArray().length);
-        preview_imgv.setImageBitmap(bitmap);
-
-        // Automatic Rectangle Detection and Display of Cropped Images
-        try {
-            Bitmap initPass = findRectangle(bitmap);
-            preview_imgv.setImageBitmap(initPass);
-            detection_imgv.setImageBitmap(initResult);
-
-            //
-            Bitmap mainReactBmp = Bitmap.createBitmap(initResult, 10, 250, initResult.getWidth() - 10, initResult.getHeight() - 250);
-            Bitmap mainPass =  findRectangle(mainReactBmp);
-            main_imgv.setImageBitmap(mainResult);
-            int reactiveCropStartX = mainResult.getWidth() / 4;
-            int reactiveCropStartY = mainResult.getHeight() / 4;
-            int reactiveCropWidth = mainResult.getWidth() / 2;
-            int reactiveCropHeight = mainResult.getHeight() / 2;
-            mainCropped = Bitmap.createBitmap(mainResult, reactiveCropStartX, reactiveCropStartY, reactiveCropWidth, reactiveCropHeight);
-
-            Bitmap constantReactBmp = Bitmap.createBitmap(initResult, 10, 10, initResult.getWidth() - 20, initResult.getHeight() - 535);
-            Bitmap constantPass = findRectangle(constantReactBmp);
-            constant_imgv.setImageBitmap(constantResult);
-            int nonreactiveCropStartX = constantResult.getWidth() / 4;
-            int nonreactiveCropStartY = constantResult.getHeight() / 4;
-            int nonreactiveCropWidth = constantResult.getWidth() / 2;
-            int nonreactiveCropHeight = constantResult.getHeight() / 2;
-            constantCropped = Bitmap.createBitmap(constantResult, nonreactiveCropStartX, nonreactiveCropStartY, nonreactiveCropWidth, nonreactiveCropHeight);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // OnClickListener for Next button
-        next_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ByteArrayOutputStream reactivebaos = new ByteArrayOutputStream();
-                mainCropped.compress(Bitmap.CompressFormat.JPEG, 100, reactivebaos);
-                User.setCroppedReactiveByteArray(reactivebaos.toByteArray());
-
-                ByteArrayOutputStream nonreactivebaos = new ByteArrayOutputStream();
-                constantCropped.compress(Bitmap.CompressFormat.JPEG, 100, nonreactivebaos);
-                User.setCroppedNonReactiveByteArray(nonreactivebaos.toByteArray());
-
-                User.setSaveRGBValues(saveText_rbtn.isChecked());
-
-                openGetDyeAreaActivity();
-            }
-        });
-
-        // OnClickListener for Discard button
-        discard_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                detectionCounter = 0;
-
-                if (User.getCameFromCamera()) {
-                    openImageCaptureActivity();
-                }
-                else {
-                    openImportImageActivity();
-                }
-
-            }
-        });
-
-    }
-
-    // Saving cropped image in database
-    private void save(byte[] bytes) throws IOException {
-        String deviceManufacturer = Build.MANUFACTURER;
-        String deviceModel = Build.MODEL;
-        String deviceOs = Build.VERSION.RELEASE;
-
-        makeRequest imageUploadRequest = new makeRequest("http://192.168.0.29/projectPHP/imageupload.php", "POST", "imageUpload", bytes, deviceManufacturer, deviceModel, deviceOs);
-        if (imageUploadRequest.startRequest()) {
-            if(imageUploadRequest.onComplete()) {
-
-                try {
-                    JSONObject obj = new JSONObject(imageUploadRequest.getResult());
-                    if (obj.getString("message").equals("none")) {
-                        Toast.makeText(getApplicationContext(), "Image Uploaded Successfully", Toast.LENGTH_LONG).show();
-                        User.setUserImageNo(User.getUserImageNo() + 1);
-                        openImageCaptureActivity();
-                    }
-                    else {
-                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
-                    }
-
-                } catch (JSONException e) {
-                    Toast.makeText(getApplicationContext(), imageUploadRequest.getResult(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
+public class detectionUtility {
 
     // Rectangle Detection Code based on Project by dhananjay-91
     // at https://github.com/dhananjay-91/DetectRectangle
-    private static Bitmap findRectangle(Bitmap image) throws Exception {
+    public static Bitmap findRectangle(Bitmap image) throws Exception {
         Mat first = new Mat();
         Mat temp = new Mat();
         Mat src = new Mat();
@@ -193,9 +62,9 @@ public class ImageAnalysis extends AppCompatActivity {
                 }
                 else {
                     Imgproc.adaptiveThreshold(gray0, gray, thresholdLevel,
-                                                Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,
-                                                Imgproc.THRESH_BINARY,
-                                                (src.width() + src.height()) / 200, j);
+                            Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,
+                            Imgproc.THRESH_BINARY,
+                            (src.width() + src.height()) / 200, j);
                 }
 
                 Imgproc.findContours(gray, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
@@ -273,9 +142,6 @@ public class ImageAnalysis extends AppCompatActivity {
                 P3 = unorderedPoints.get(0);
             }
 
-            // pointOneCoords = "Ordered P1 X: " + P1.x + ", Y: " + P1.y;
-            // pointTwoCoords = "Unordered P2 X: " + unorderedP2.x + ", Y: " + unorderedP2.y;
-
             source.add(P1);
             source.add(P3);
             source.add(P4);
@@ -285,17 +151,17 @@ public class ImageAnalysis extends AppCompatActivity {
             Mat sourceImage = new Mat();
             Utils.bitmapToMat(image, sourceImage);
 
-            if (detectionCounter == 0) {
-                initResult = warp(sourceImage, startM);
+            if (ImageManipulation.detectionCounter == 0) {                      // First pass detects bandage outline
+                ImageManipulation.initResult = warp(sourceImage, startM);
             }
-            else if (detectionCounter == 1) {
-                mainResult = warp(sourceImage, startM);
+            else if (ImageManipulation.detectionCounter == 1) {                 // Second pass detects reactive patch
+                ImageManipulation.mainResult = warp(sourceImage, startM);
             }
             else {
-                constantResult = warp(sourceImage, startM);
+                ImageManipulation.constantResult = warp(sourceImage, startM);   // Last pass detects non-reactive patch
             }
 
-            detectionCounter++;
+            ImageManipulation.detectionCounter++;
 
             Imgproc.circle(src, unorderedP1, 15, new Scalar(255, 0, 0), 3);
             Imgproc.circle(src, unorderedP2, 30, new Scalar(255, 0, 0), 3);
@@ -328,7 +194,7 @@ public class ImageAnalysis extends AppCompatActivity {
         int resultHeight;
         int resultWidth;
 
-        if (detectionCounter == 0) {
+        if (ImageManipulation.detectionCounter == 0) {
             resultHeight = 800;
             resultWidth = 500;
         }
@@ -354,27 +220,12 @@ public class ImageAnalysis extends AppCompatActivity {
         Mat perspectiveTransform = Imgproc.getPerspectiveTransform(startM, endM);
 
         Imgproc.warpPerspective(inputMat, outputMat, perspectiveTransform,
-                                new Size(resultWidth, resultHeight), Imgproc.INTER_CUBIC);
+                new Size(resultWidth, resultHeight), Imgproc.INTER_CUBIC);
 
         Bitmap bmp;
         bmp = Bitmap.createBitmap(outputMat.cols(), outputMat.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(outputMat, bmp);
         return bmp;
-    }
-
-    private void openImageCaptureActivity() {
-        Intent intent = new Intent(this, ImageCapture.class);
-        startActivity(intent);
-    }
-
-    private void openImportImageActivity() {
-        Intent intent = new Intent(this, ImportImage.class);
-        startActivity(intent);
-    }
-
-    private void openGetDyeAreaActivity() {
-        Intent intent = new Intent(this, GetDyeArea.class);
-        startActivity(intent);
     }
 
 }
