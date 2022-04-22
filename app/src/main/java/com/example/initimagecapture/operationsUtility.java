@@ -8,7 +8,7 @@ public class operationsUtility {
     public static double getCalculatedCO2Percentage(Bitmap bmp) {
         double redTotal = 0;
 
-        for (int y = 0; y < bmp.getHeight(); y++) {           // Currently uses every pixel in the Bitmap
+        for (int y = 0; y < bmp.getHeight(); y++) {                             // Currently uses every pixel in the Bitmap
             for (int x = 0; x < bmp.getWidth(); x++) {
                 int pixelColours = bmp.getPixel(x, y);
                 redTotal += Color.red(pixelColours);
@@ -16,6 +16,8 @@ public class operationsUtility {
         }
 
         double redAverage = redTotal / (bmp.getWidth() * bmp.getHeight());
+
+        CurrentAnalysis.averageRed = redAverage;
 
         double redBy255 = redAverage / 255;
         double uncorrectedGamma;

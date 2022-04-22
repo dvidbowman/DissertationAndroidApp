@@ -121,8 +121,10 @@ public class AllAnalyses extends AppCompatActivity {
                             String id = obj.getString("id");
                             String date = obj.getString("date");
                             String value = obj.getString("value");
+                            String avgRed = obj.getString("avgRed");
+                            String pco2 = obj.getString("pco2");
 
-                            UserImage tempImage = new UserImage(id, date, value);
+                            UserImage tempImage = new UserImage(id, date, value, avgRed, pco2);
                             images.add(tempImage);
                         }
 

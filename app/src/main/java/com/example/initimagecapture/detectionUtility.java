@@ -20,8 +20,6 @@ import java.util.List;
 
 public class detectionUtility {
 
-    // Rectangle Detection Code based on Project by dhananjay-91
-    // at https://github.com/dhananjay-91/DetectRectangle
     public static Bitmap findRectangle(Bitmap image) throws Exception {
         Mat first = new Mat();
         Mat temp = new Mat();

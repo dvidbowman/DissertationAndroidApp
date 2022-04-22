@@ -3,7 +3,6 @@ package com.example.initimagecapture;
 public class User {
 
     private static int userId;
-    private static String username;
     private static int noImages;
     private static byte[] byteArray;
     private static byte[] croppedReactiveByteArray;
@@ -14,7 +13,6 @@ public class User {
     // resetUser called upon LogOut
     public static void resetUser() {
         userId = -1;
-        username = "";
         noImages = -1;
         byteArray = null;
         croppedReactiveByteArray = null;
@@ -32,14 +30,6 @@ public class User {
     public static int getUserImageNo() { return noImages; }
 
     public static void setUserImageNo(int numberImages) { noImages = numberImages; }
-
-    public static String getUsername() {
-        return username;
-    }
-
-    public static void setUsername(String uname) {
-        username = uname;
-    }
 
     public static byte[] getUserByteArray() {
         return byteArray;

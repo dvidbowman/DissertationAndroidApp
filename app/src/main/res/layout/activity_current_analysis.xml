@@ -23,24 +23,12 @@
         android:id="@+id/imageView_crop"
         android:layout_width="150dp"
         android:layout_height="138dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="64dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.869"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_SaveSample"
         app:srcCompat="@drawable/ic_launcher_foreground" />
-
-    <TextView
-        android:id="@+id/textView_dyedArea"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/enter_some_information_about_this_sample"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.383"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_crop" />
 
     <Button
         android:id="@+id/button_saveAnalysis"
@@ -54,34 +42,6 @@
         android:textColor="#FFFFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <EditText
-        android:id="@+id/textBox_SampleTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:ems="10"
-        android:hint="@string/title"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.139"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_dyedArea" />
-
-    <EditText
-        android:id="@+id/textBox_SampleLightLevel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:ems="10"
-        android:hint="@string/light_level"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.139"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textBox_SampleTitle" />
 
     <TextView
         android:id="@+id/textView_SaveSample"
@@ -97,27 +57,107 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textView_nonReactiveRedLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Non-Reactive Average Red:"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.165"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_reactiveRedLabel" />
+
+    <TextView
+        android:id="@+id/textView_reactiveRedLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Reactive Average Red:"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.132"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_nrPCO2Label" />
+
+    <TextView
+        android:id="@+id/textView_reactiveRed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="20dp"
+        android:text="reacRed"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/textView_nrPCO2Label"
+        app:layout_constraintTop_toBottomOf="@+id/textView_nonReactivePCO2" />
+
+    <TextView
+        android:id="@+id/textView_rPCO2Label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Reactive %CO2: "
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.105"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_fullImage" />
+
+    <TextView
+        android:id="@+id/textView_nrPCO2Label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Non-Reactive %CO2: "
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.125"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_rPCO2Label" />
+
+    <TextView
         android:id="@+id/textView_reactivePCO2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/reactive_calculated_co2"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="68dp"
+        android:text="reactivePCO2"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.169"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textBox_SampleLightLevel" />
+        app:layout_constraintStart_toEndOf="@+id/textView_nrPCO2Label"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_crop" />
 
     <TextView
-        android:id="@+id/textView_nonreactivePCO2"
+        android:id="@+id/textView_nonReactivePCO2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/non_reactive_calculated_co2"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="20dp"
+        android:text="nonReactivePCO2"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.218"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView_nrPCO2Label"
         app:layout_constraintTop_toBottomOf="@+id/textView_reactivePCO2" />
+
+    <TextView
+        android:id="@+id/textView_nonReactiveRed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="20dp"
+        android:text="nonRed"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/textView_nrPCO2Label"
+        app:layout_constraintTop_toBottomOf="@+id/textView_reactiveRed" />
+
+    <ImageView
+        android:id="@+id/imageView_fullImage"
+        android:layout_width="132dp"
+        android:layout_height="199dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toStartOf="@+id/imageView_crop"
+        app:layout_constraintHorizontal_bias="0.683"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_SaveSample"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

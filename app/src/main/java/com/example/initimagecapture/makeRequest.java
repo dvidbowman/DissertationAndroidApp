@@ -18,6 +18,7 @@ public class makeRequest extends Thread {
     private String url, httpMethod, action;
     private String username, imgToString, currentRowNumber;
     private String deviceManufacturer, deviceModel, deviceOs;
+    private String averageRed, pco2;
     String[] data, field;
 
     // Result from the HTTP Request
@@ -43,7 +44,7 @@ public class makeRequest extends Thread {
     }
 
     // Constructor for imageUpload
-    public makeRequest(String url, String httpMethod, String action, byte[] imgByteArray, String deviceManufacturer, String deviceModel, String deviceOs) {
+    public makeRequest(String url, String httpMethod, String action, byte[] imgByteArray, String deviceManufacturer, String deviceModel, String deviceOs, String averageRed, String pco2) {
         this.url = url;
         this.httpMethod = httpMethod;
         this.action = action;
@@ -51,6 +52,8 @@ public class makeRequest extends Thread {
         this.deviceManufacturer = deviceManufacturer;
         this.deviceModel = deviceModel;
         this.deviceOs = deviceOs;
+        this.averageRed = averageRed;
+        this.pco2 = pco2;
     }
 
     @Override
@@ -86,7 +89,9 @@ public class makeRequest extends Thread {
                     post_data.append(URLEncoder.encode("image", "UTF-8")).append("=").append(URLEncoder.encode(this.imgToString, UTF8)).append("&");
                     post_data.append(URLEncoder.encode("device_manufacturer", "UTF-8")).append("=").append(URLEncoder.encode(this.deviceManufacturer, UTF8)).append("&");
                     post_data.append(URLEncoder.encode("device_model", "UTF-8")).append("=").append(URLEncoder.encode(this.deviceModel, UTF8)).append("&");
-                    post_data.append(URLEncoder.encode("device_os", "UTF-8")).append("=").append(URLEncoder.encode(this.deviceOs, UTF8));
+                    post_data.append(URLEncoder.encode("device_os", "UTF-8")).append("=").append(URLEncoder.encode(this.deviceOs, UTF8)).append("&");
+                    post_data.append(URLEncoder.encode("average_red", "UTF-8")).append("=").append(URLEncoder.encode(this.averageRed, UTF8)).append("&");
+                    post_data.append(URLEncoder.encode("pco2", "UTF-8")).append("=").append(URLEncoder.encode(this.pco2, UTF8));
                     break;
                 default:
                     break;

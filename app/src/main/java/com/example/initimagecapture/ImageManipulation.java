@@ -118,34 +118,6 @@ public class ImageManipulation extends AppCompatActivity {
 
     }
 
-    // Saving cropped image in database
-    private void save(byte[] bytes) throws IOException {
-        String deviceManufacturer = Build.MANUFACTURER;
-        String deviceModel = Build.MODEL;
-        String deviceOs = Build.VERSION.RELEASE;
-
-        makeRequest imageUploadRequest = new makeRequest("http://192.168.0.29/projectPHP/imageupload.php", "POST", "imageUpload", bytes, deviceManufacturer, deviceModel, deviceOs);
-        if (imageUploadRequest.startRequest()) {
-            if(imageUploadRequest.onComplete()) {
-
-                try {
-                    JSONObject obj = new JSONObject(imageUploadRequest.getResult());
-                    if (obj.getString("message").equals("none")) {
-                        Toast.makeText(getApplicationContext(), "Image Uploaded Successfully", Toast.LENGTH_LONG).show();
-                        User.setUserImageNo(User.getUserImageNo() + 1);
-                        openImageCaptureActivity();
-                    }
-                    else {
-                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
-                    }
-
-                } catch (JSONException e) {
-                    Toast.makeText(getApplicationContext(), imageUploadRequest.getResult(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
-
     private void openImageCaptureActivity() {
         Intent intent = new Intent(this, ImageCapture.class);
         startActivity(intent);

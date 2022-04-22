@@ -89,9 +89,9 @@ public class Login extends AppCompatActivity {
                                         JSONObject obj = new JSONObject(logInAuthRequest.getResult());
 
                                         if (obj.getString("message").equals("none")) {
-                                            User.setUsername(data[0]);
                                             User.setUserId(Integer.parseInt(obj.getString("id")));
                                             User.setUserImageNo(Integer.parseInt(obj.getString("noImages")));
+                                            User.setLoggedIn(true);
                                             Toast.makeText(getApplicationContext(), "Login Successful: UserID = " + User.getUserId(), Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                             startActivity(intent);

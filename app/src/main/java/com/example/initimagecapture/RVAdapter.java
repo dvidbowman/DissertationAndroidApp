@@ -37,6 +37,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.RVViewHolder> {
     public void onBindViewHolder(@NonNull RVViewHolder holder, int position) {
         holder.id.setText(images.get(position).getImgId());
         holder.date.setText(images.get(position).getImgDate());
+        holder.avgRed.setText(images.get(position).getAvgRed());
+        holder.pco2.setText(images.get(position).getPco2());
 
         //Converting Image String to Bitmap to show it in ImageView
         byte[] imgByteArray = Base64.decode(images.get(position).getImgValue(), Base64.DEFAULT);
@@ -51,7 +53,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.RVViewHolder> {
 
     public class RVViewHolder extends RecyclerView.ViewHolder {
 
-        TextView id, date;
+        TextView id, date, avgRed, pco2;
         ImageView img;
 
         public RVViewHolder(@NonNull View itemView) {
@@ -59,7 +61,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.RVViewHolder> {
             id = itemView.findViewById(R.id.textView_imageId);
             date = itemView.findViewById(R.id.textView_imageDate);
             img = itemView.findViewById(R.id.imageView_image);
-
+            avgRed = itemView.findViewById(R.id.textView_avgRed);
+            pco2 = itemView.findViewById(R.id.textView_PCO2);
         }
 
     }

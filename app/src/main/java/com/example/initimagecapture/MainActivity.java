@@ -23,41 +23,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Button settings_btn, analyses_btn, camera_btn, logout_btn, import_btn;
+    private Button analyses_btn, camera_btn, logout_btn, import_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // OnClickListener for Settings button
-        settings_btn = (Button) findViewById(R.id.button_settings);
-        settings_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openSettingsActivity();
-            }
-        });
-
-        // OnClickListener for Analyses Button
-        analyses_btn = (Button) findViewById(R.id.button_analyses);
-        analyses_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openAllAnalysesActivity();
-            }
-        });
-
-        // OnClickListener for TakeAnImage button
-        camera_btn = (Button) findViewById(R.id.button_takeImage);
-        camera_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openImageCaptureActivity();
-            }
-        });
-
-        // DialogInterface presented when user clicks LogOut
+        // DialogInterface presented when user clicks LogOut, or SeeAnalyses while not logged in
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -70,6 +43,32 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+
+        // OnClickListener for Analyses Button
+        analyses_btn = (Button) findViewById(R.id.button_analyses);
+        analyses_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (User.getLoggedIn()) {
+                    openAllAnalysesActivity();
+                }
+                else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                    builder.setMessage("You are not currently logged in. Would you like to Log In now?").setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
+                }
+
+            }
+        });
+
+        // OnClickListener for TakeAnImage button
+        camera_btn = (Button) findViewById(R.id.button_takeImage);
+        camera_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openImageCaptureActivity();
+            }
+        });
 
         // OnClickListener for LogOut button
         logout_btn = (Button) findViewById(R.id.button_logout);
