@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                    builder.setMessage("You are not currently logged in. Would you like to Log In now?").setPositiveButton("Yes", dialogClickListener)
+                    builder.setMessage("You must be logged in to view saved Analyses. Would you like to Log In now?").setPositiveButton("Yes", dialogClickListener)
                             .setNegativeButton("No", dialogClickListener).show();
                 }
 

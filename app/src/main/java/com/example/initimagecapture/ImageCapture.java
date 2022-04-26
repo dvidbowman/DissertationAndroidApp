@@ -69,6 +69,7 @@ public class ImageCapture extends AppCompatActivity {
         @Override
         public void onDisconnected(@NonNull CameraDevice camera) {
             cameraDevice.close();
+            cameraDevice = null;
         }
 
         @Override

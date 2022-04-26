@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -35,17 +36,26 @@ import java.util.List;
 
 public class ImageManipulation extends AppCompatActivity {
     // Controls
+    private TextView reactiveLabel_txtv, warpedLabel_txtv, failLabel1_txtv, failLabel2_txtv;
     private Button discard_btn, next_btn;
     private ImageView preview_imgv, detection_imgv, constant_imgv, main_imgv;
     public static Bitmap initResult, mainResult, constantResult;
     private static Bitmap mainCropped, constantCropped;
     public static int detectionCounter = 0;
+    private static boolean detectionFailed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_manipulation);
         detectionCounter = 0;
+
+        warpedLabel_txtv = findViewById(R.id.textView_WarpedImage);
+        reactiveLabel_txtv = findViewById(R.id.textView_ReactiveAreas);
+        failLabel1_txtv = findViewById(R.id.textView_failLabel1);
+        failLabel2_txtv = findViewById(R.id.textView_failLabel2);
+        failLabel1_txtv.setVisibility(View.INVISIBLE);
+        failLabel2_txtv.setVisibility(View.INVISIBLE);
 
         discard_btn = findViewById(R.id.button_discardImage);
         next_btn = findViewById(R.id.button_nextImageAnalysis);
@@ -64,24 +74,53 @@ public class ImageManipulation extends AppCompatActivity {
             preview_imgv.setImageBitmap(initPass);
             detection_imgv.setImageBitmap(initResult);
 
-            //
-            Bitmap mainReactBmp = Bitmap.createBitmap(initResult, 10, 250, initResult.getWidth() - 10, initResult.getHeight() - 250);
-            Bitmap mainPass =  detectionUtility.findRectangle(mainReactBmp);
-            main_imgv.setImageBitmap(mainResult);
-            int reactiveCropStartX = mainResult.getWidth() / 4;
-            int reactiveCropStartY = mainResult.getHeight() / 4;
-            int reactiveCropWidth = mainResult.getWidth() / 2;
-            int reactiveCropHeight = mainResult.getHeight() / 2;
-            mainCropped = Bitmap.createBitmap(mainResult, reactiveCropStartX, reactiveCropStartY, reactiveCropWidth, reactiveCropHeight);
+            if (initResult == null) {
+                detectionFailed = true;
+            }
+            else {
+                Bitmap mainReactBmp = Bitmap.createBitmap(initResult, 10, 250, initResult.getWidth() - 10, initResult.getHeight() - 250);
+                Bitmap mainPass =  detectionUtility.findRectangle(mainReactBmp);
+                main_imgv.setImageBitmap(mainResult);
 
-            Bitmap constantReactBmp = Bitmap.createBitmap(initResult, 10, 10, initResult.getWidth() - 20, initResult.getHeight() - 535);
-            Bitmap constantPass = detectionUtility.findRectangle(constantReactBmp);
-            constant_imgv.setImageBitmap(constantResult);
-            int nonreactiveCropStartX = constantResult.getWidth() / 4;
-            int nonreactiveCropStartY = constantResult.getHeight() / 4;
-            int nonreactiveCropWidth = constantResult.getWidth() / 2;
-            int nonreactiveCropHeight = constantResult.getHeight() / 2;
-            constantCropped = Bitmap.createBitmap(constantResult, nonreactiveCropStartX, nonreactiveCropStartY, nonreactiveCropWidth, nonreactiveCropHeight);
+                if (mainResult == null) {
+                    detectionFailed = true;
+                    Toast.makeText(getApplicationContext(), "Missing Bitmap", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    int reactiveCropStartX = mainResult.getWidth() / 4;
+                    int reactiveCropStartY = mainResult.getHeight() / 4;
+                    int reactiveCropWidth = mainResult.getWidth() / 2;
+                    int reactiveCropHeight = mainResult.getHeight() / 2;
+                    mainCropped = Bitmap.createBitmap(mainResult, reactiveCropStartX, reactiveCropStartY, reactiveCropWidth, reactiveCropHeight);
+                    Bitmap constantReactBmp = Bitmap.createBitmap(initResult, 10, 10, initResult.getWidth() - 20, initResult.getHeight() - 535);
+                    Bitmap constantPass = detectionUtility.findRectangle(constantReactBmp);
+                    constant_imgv.setImageBitmap(constantResult);
+
+                    if (constantResult == null) {
+                        detectionFailed = true;
+                    }
+                    else {
+                        int nonreactiveCropStartX = constantResult.getWidth() / 4;
+                        int nonreactiveCropStartY = constantResult.getHeight() / 4;
+                        int nonreactiveCropWidth = constantResult.getWidth() / 2;
+                        int nonreactiveCropHeight = constantResult.getHeight() / 2;
+                        constantCropped = Bitmap.createBitmap(constantResult, nonreactiveCropStartX, nonreactiveCropStartY, nonreactiveCropWidth, nonreactiveCropHeight);
+                    }
+                }
+
+            }
+
+            if (detectionFailed) {
+                Toast.makeText(getApplicationContext(), "Missing Bitmap", Toast.LENGTH_LONG).show();
+                next_btn.setVisibility(View.INVISIBLE);
+                detection_imgv.setVisibility(View.INVISIBLE);
+                main_imgv.setVisibility(View.INVISIBLE);
+                constant_imgv.setVisibility(View.INVISIBLE);
+                reactiveLabel_txtv.setVisibility(View.INVISIBLE);
+                warpedLabel_txtv.setVisibility(View.INVISIBLE);
+                failLabel1_txtv.setVisibility(View.VISIBLE);
+                failLabel2_txtv.setVisibility(View.VISIBLE);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

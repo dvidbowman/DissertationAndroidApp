@@ -92,6 +92,29 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView_preview" />
 
     <TextView
+        android:id="@+id/textView_failLabel1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="52dp"
+        android:text="Something went wrong!"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_preview" />
+
+    <TextView
+        android:id="@+id/textView_failLabel2"
+        android:layout_width="319dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="92dp"
+        android:lines="4"
+        android:text="A bandage could not be detected in this image. Please import or take a new image of the bandage."
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_preview" />
+
+    <TextView
         android:id="@+id/textView_ReactiveAreas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
