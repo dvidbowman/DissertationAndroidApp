@@ -109,7 +109,7 @@ public class AllAnalyses extends AppCompatActivity {
 
         // Initial RecyclerView setup makes requests to get User Images
         images_recyclerView = (RecyclerView) findViewById(R.id.recyclerView_Images);
-        for (int i = 0; i < User.getUserImageNo(); i++) {
+        for (int i = 0; i < User.getInstance().getUserImageNo(); i++) {
             makeRequest getUserImagesRequest = new makeRequest("http://192.168.0.29/projectPHP/getuserimages.php", "POST", "getUserImages", String.valueOf(i));
             if(getUserImagesRequest.startRequest()) {
                 if(getUserImagesRequest.onComplete()) {

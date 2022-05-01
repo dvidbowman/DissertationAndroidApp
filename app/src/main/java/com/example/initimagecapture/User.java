@@ -1,58 +1,55 @@
 package com.example.initimagecapture;
 
 public class User {
+    private static User user;
 
-    private static int userId;
-    private static int noImages;
-    private static byte[] byteArray;
-    private static byte[] croppedReactiveByteArray;
-    private static byte[] croppedNonReactiveByteArray;
-    private static boolean cameFromCamera;
-    private static boolean loggedIn;
+    private int userId = -1;
+    private int noImages = 0;
+    private boolean loggedIn = false;
+
+    private User() {}
+
+    public static User getInstance() {
+        if (user == null) {
+            user = new User();
+        }
+
+        return user;
+    }
 
     // resetUser called upon LogOut
-    public static void resetUser() {
-        userId = -1;
-        noImages = -1;
-        byteArray = null;
-        croppedReactiveByteArray = null;
-        croppedNonReactiveByteArray = null;
+    public void resetUser() {
+        user.setUserId(-1);
+        user.setUserImageNo(0);
+        user.setLoggedIn(false);
     }
 
-    public static int getUserId() {
-        return userId;
+    public int getUserId() {
+        return this.userId;
     }
 
-    public static void setUserId(int uId) {
-        userId = uId;
+    public void setUserId(int userId) {
+        if (userId > 0) {
+            this.userId = userId;
+        }
     }
 
-    public static int getUserImageNo() { return noImages; }
-
-    public static void setUserImageNo(int numberImages) { noImages = numberImages; }
-
-    public static byte[] getUserByteArray() {
-        return byteArray;
+    public int getUserImageNo() {
+        return this.noImages;
     }
 
-    public static void setUserByteArray(byte[] arr) {
-        byteArray = arr;
+    public void setUserImageNo(int noImages) {
+        if (noImages >= 0) {
+            this.noImages = noImages;
+        }
     }
 
-    public static byte[] getCroppedReactiveByteArray() { return croppedReactiveByteArray; }
+    public boolean getLoggedIn() {
+        return this.loggedIn;
+    }
 
-    public static void setCroppedReactiveByteArray(byte[] arr) { croppedReactiveByteArray = arr; }
-
-    public static byte[] getCroppedNonReactiveByteArray() { return croppedNonReactiveByteArray; }
-
-    public static void setCroppedNonReactiveByteArray(byte[] arr) { croppedNonReactiveByteArray = arr; }
-
-    public static boolean getCameFromCamera() { return cameFromCamera; }
-
-    public static void setCameFromCamera(boolean fromCamera) { cameFromCamera = fromCamera; }
-
-    public static boolean getLoggedIn() { return loggedIn; }
-
-    public static void setLoggedIn(boolean isLoggedIn) { loggedIn = isLoggedIn; }
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
 
 }

@@ -47,6 +47,8 @@ public class ImageCapture extends AppCompatActivity {
     private Size imageDimension;
     private ImageReader imageReader;
 
+    private byte[] exportedByteArray;
+
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -148,8 +150,9 @@ public class ImageCapture extends AppCompatActivity {
                         ByteBuffer buffer = image.getPlanes()[0].getBuffer();
                         byte[] bytes = new byte[buffer.capacity()];
                         buffer.get(bytes);
-                        User.setUserByteArray(bytes);
-                        User.setCameFromCamera(true);
+                        exportedByteArray = bytes;
+                        //User.setUserByteArray(bytes);
+
                         openImageManipulationActivity();
                     } finally {
                         {
@@ -334,6 +337,8 @@ public class ImageCapture extends AppCompatActivity {
 
     private void openImageManipulationActivity() {
         Intent intent = new Intent(this, ImageManipulation.class);
+        intent.putExtra("cameFromCamera", true);
+        intent.putExtra("initialByteArray", exportedByteArray);
         startActivity(intent);
     }
 

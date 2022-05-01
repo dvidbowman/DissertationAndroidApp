@@ -16,7 +16,7 @@ import java.net.URLEncoder;
 public class makeRequest extends Thread {
     // Url to make request to, the HTTP method to use, and the purpose of request (getUserID, getUserImages etc.)
     private String url, httpMethod, action;
-    private String username, imgToString, currentRowNumber;
+    private String imgToString, currentRowNumber;
     private String deviceManufacturer, deviceModel, deviceOs;
     private String averageRed, pco2;
     String[] data, field;
@@ -44,7 +44,9 @@ public class makeRequest extends Thread {
     }
 
     // Constructor for imageUpload
-    public makeRequest(String url, String httpMethod, String action, byte[] imgByteArray, String deviceManufacturer, String deviceModel, String deviceOs, String averageRed, String pco2) {
+    public makeRequest(String url, String httpMethod, String action, byte[] imgByteArray,
+                       String deviceManufacturer, String deviceModel, String deviceOs,
+                       String averageRed, String pco2) {
         this.url = url;
         this.httpMethod = httpMethod;
         this.action = action;
@@ -81,11 +83,11 @@ public class makeRequest extends Thread {
                     }
                     break;
                 case "getUserImages":
-                    post_data.append(URLEncoder.encode("user_id", "UTF-8")).append("=").append(URLEncoder.encode(String.valueOf(User.getUserId()), UTF8)).append("&");
+                    post_data.append(URLEncoder.encode("user_id", "UTF-8")).append("=").append(URLEncoder.encode(String.valueOf(User.getInstance().getUserId()), UTF8)).append("&");
                     post_data.append(URLEncoder.encode("currentRowNumber", "UTF-8")).append("=").append(URLEncoder.encode(String.valueOf(this.currentRowNumber), UTF8));
                     break;
                 case "imageUpload":
-                    post_data.append(URLEncoder.encode("user_id", "UTF-8")).append("=").append(URLEncoder.encode(String.valueOf(User.getUserId()), UTF8)).append("&");
+                    post_data.append(URLEncoder.encode("user_id", "UTF-8")).append("=").append(URLEncoder.encode(String.valueOf(User.getInstance().getUserId()), UTF8)).append("&");
                     post_data.append(URLEncoder.encode("image", "UTF-8")).append("=").append(URLEncoder.encode(this.imgToString, UTF8)).append("&");
                     post_data.append(URLEncoder.encode("device_manufacturer", "UTF-8")).append("=").append(URLEncoder.encode(this.deviceManufacturer, UTF8)).append("&");
                     post_data.append(URLEncoder.encode("device_model", "UTF-8")).append("=").append(URLEncoder.encode(this.deviceModel, UTF8)).append("&");
@@ -146,5 +148,30 @@ public class makeRequest extends Thread {
     public String getData() {
         return result_data;
     }
+
+    //Getters used for testing
+    public String getURL() { return this.url; }
+
+    public String getHttpMethod() { return this.httpMethod; }
+
+    public String getAction() { return this.action; }
+
+    public String getImgToString() { return this.imgToString;}
+
+    public String getCurrentRowNumber() { return this.currentRowNumber;}
+
+    public String getDeviceManufacturer() { return this.deviceManufacturer;}
+
+    public String getDeviceModel() { return this.deviceModel;}
+
+    public String getDeviceOs() { return this.deviceOs;}
+
+    public String getAverageRed() { return this.averageRed;}
+
+    public String getPco2() { return this.pco2;}
+
+    public String[] getField() { return this.field; }
+
+    public String[] getDataArray() { return this.data; }
 
 }

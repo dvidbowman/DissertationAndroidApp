@@ -22,6 +22,8 @@ public class ImageImport extends AppCompatActivity {
     private Button back_btn, chooseImage_btn, next_btn;
     private ImageView importedImage_imgv;
 
+    private byte[] exportedByteArray;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,8 +83,8 @@ public class ImageImport extends AppCompatActivity {
 
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 importedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                User.setUserByteArray(stream.toByteArray());
-                User.setCameFromCamera(false);
+                exportedByteArray = stream.toByteArray();
+                //User.setUserByteArray(stream.toByteArray());
                 openImageManipulationActivity();
             }
         });
@@ -98,6 +100,8 @@ public class ImageImport extends AppCompatActivity {
 
     public void openImageManipulationActivity() {
         Intent intent = new Intent(this, ImageManipulation.class);
+        intent.putExtra("cameFromCamera", false);
+        intent.putExtra("initialByteArray", exportedByteArray);
         startActivity(intent);
         finish();
     }

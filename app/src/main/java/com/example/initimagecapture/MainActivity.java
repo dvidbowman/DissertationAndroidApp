@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         analyses_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (User.getLoggedIn()) {
+                if (User.getInstance().getLoggedIn()) {
                     openAllAnalysesActivity();
                 }
                 else {
@@ -91,11 +91,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void openSettingsActivity() {
-        Intent intent = new Intent(this, Settings.class);
-        startActivity(intent);
-    }
-
     public void openAllAnalysesActivity() {
         Intent intent = new Intent(this, AllAnalyses.class);
         startActivity(intent);
@@ -107,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openLoginActivity() {
-        User.resetUser();
+        User.getInstance().resetUser();
 
         Intent intent = new Intent(this, Login.class);
         startActivity(intent);

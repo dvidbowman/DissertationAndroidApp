@@ -43,12 +43,23 @@ public class ImageManipulation extends AppCompatActivity {
     private static Bitmap mainCropped, constantCropped;
     public static int detectionCounter = 0;
     private static boolean detectionFailed = false;
+    private boolean cameFromCamera;
+
+    private byte[] initialByteArray;
+    private byte[] croppedReactiveByteArray;
+    private byte[] croppedNonReactiveByteArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_manipulation);
         detectionCounter = 0;
+        detectionFailed = false;
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            cameFromCamera = extras.getBoolean("cameFromCamera");
+            initialByteArray = extras.getByteArray("initialByteArray");
+        }
 
         warpedLabel_txtv = findViewById(R.id.textView_WarpedImage);
         reactiveLabel_txtv = findViewById(R.id.textView_ReactiveAreas);
@@ -65,7 +76,7 @@ public class ImageManipulation extends AppCompatActivity {
         main_imgv = findViewById(R.id.imageView_mainReact);
 
         // Sets Bitmap of preview ImageView using bytearray of image just taken
-        Bitmap bitmap = BitmapFactory.decodeByteArray(User.getUserByteArray(), 0, User.getUserByteArray().length);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(initialByteArray, 0, initialByteArray.length);
         preview_imgv.setImageBitmap(bitmap);
 
         // Automatic Rectangle Detection and Display of Cropped Images
@@ -132,11 +143,13 @@ public class ImageManipulation extends AppCompatActivity {
             public void onClick(View v) {
                 ByteArrayOutputStream reactivebaos = new ByteArrayOutputStream();
                 mainCropped.compress(Bitmap.CompressFormat.JPEG, 100, reactivebaos);
-                User.setCroppedReactiveByteArray(reactivebaos.toByteArray());
+                // User.setCroppedReactiveByteArray(reactivebaos.toByteArray());
+                croppedReactiveByteArray = reactivebaos.toByteArray();
 
                 ByteArrayOutputStream nonreactivebaos = new ByteArrayOutputStream();
                 constantCropped.compress(Bitmap.CompressFormat.JPEG, 100, nonreactivebaos);
-                User.setCroppedNonReactiveByteArray(nonreactivebaos.toByteArray());
+                // User.setCroppedNonReactiveByteArray(nonreactivebaos.toByteArray());
+                croppedNonReactiveByteArray = reactivebaos.toByteArray();
 
                 openCurrentAnalysisActivity();
             }
@@ -146,7 +159,12 @@ public class ImageManipulation extends AppCompatActivity {
         discard_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (User.getCameFromCamera()) {
+                detection_imgv.setImageDrawable(null);
+                main_imgv.setImageDrawable(null);
+                constant_imgv.setImageDrawable(null);
+                initResult = null;
+
+                if (cameFromCamera) {
                     openImageCaptureActivity();
                 }
                 else {
@@ -169,6 +187,10 @@ public class ImageManipulation extends AppCompatActivity {
 
     private void openCurrentAnalysisActivity() {
         Intent intent = new Intent(this, CurrentAnalysis.class);
+        intent.putExtra("cameFromCamera", cameFromCamera);
+        intent.putExtra("initialByteArray", initialByteArray);
+        intent.putExtra("croppedReactiveByteArray", croppedReactiveByteArray);
+        intent.putExtra("croppedNonReactiveByteArray", croppedNonReactiveByteArray);
         startActivity(intent);
     }
 

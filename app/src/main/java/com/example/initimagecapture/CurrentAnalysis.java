@@ -29,14 +29,28 @@ public class CurrentAnalysis extends AppCompatActivity {
     private double savedAverageRed;
     private double savedPCO2;
 
-    Bitmap reactiveBitmap = BitmapFactory.decodeByteArray(User.getCroppedReactiveByteArray(), 0, User.getCroppedReactiveByteArray().length);
-    Bitmap nonreactiveBitmap = BitmapFactory.decodeByteArray(User.getCroppedNonReactiveByteArray(), 0, User.getCroppedNonReactiveByteArray().length);
+    private boolean cameFromCamera;
+    private byte[] initialByteArray;
+
+    // Bitmap reactiveBitmap = BitmapFactory.decodeByteArray(User.getCroppedReactiveByteArray(), 0, User.getCroppedReactiveByteArray().length);
+    // Bitmap nonreactiveBitmap = BitmapFactory.decodeByteArray(User.getCroppedNonReactiveByteArray(), 0, User.getCroppedNonReactiveByteArray().length);
+    Bitmap reactiveBitmap;
+    Bitmap nonreactiveBitmap;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_current_analysis);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            cameFromCamera = extras.getBoolean("cameFromCamera");
+            byte[] croppedReactiveByteArray = extras.getByteArray("croppedReactiveByteArray");
+            byte[] croppedNonReactiveByteArray = extras.getByteArray("croppedNonReactiveByteArray");
+            initialByteArray = extras.getByteArray("initialByteArray");
+            reactiveBitmap = BitmapFactory.decodeByteArray(croppedReactiveByteArray, 0, croppedReactiveByteArray.length);
+            nonreactiveBitmap = BitmapFactory.decodeByteArray(croppedNonReactiveByteArray, 0, croppedNonReactiveByteArray.length);
+        }
 
         reactivePCO2_txtv = (TextView) findViewById(R.id.textView_reactivePCO2);
         nonreactivePCO2_txtv = (TextView) findViewById(R.id.textView_nonReactivePCO2);
@@ -47,13 +61,12 @@ public class CurrentAnalysis extends AppCompatActivity {
         croppedReactive_imgv = (ImageView) findViewById(R.id.imageView_crop);
         fullImage_imgv = (ImageView) findViewById(R.id.imageView_fullImage);
 
-
-        if (!User.getLoggedIn()) {
+        if (!User.getInstance().getLoggedIn()) {
             save_btn.setVisibility(View.INVISIBLE);
         }
 
         croppedReactive_imgv.setImageBitmap(reactiveBitmap);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(User.getUserByteArray(), 0, User.getUserByteArray().length);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(initialByteArray, 0, initialByteArray.length);
         fullImage_imgv.setImageBitmap(bitmap);
 
         savedPCO2 = operationsUtility.getCalculatedCO2Percentage(reactiveBitmap);
@@ -63,11 +76,10 @@ public class CurrentAnalysis extends AppCompatActivity {
         nonreactivePCO2_txtv.setText(String.valueOf(operationsUtility.getCalculatedCO2Percentage(nonreactiveBitmap)));
         nonReactiveRed_txtv.setText(String.valueOf(averageRed));
 
-
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (User.getCameFromCamera()) {
+                if (cameFromCamera) {
                     openImageCaptureActivity();
                 }
                 else {
@@ -79,7 +91,7 @@ public class CurrentAnalysis extends AppCompatActivity {
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                save(User.getUserByteArray());
+                save(initialByteArray);
                 save_btn.setVisibility(View.INVISIBLE);
             }
         });
@@ -100,7 +112,7 @@ public class CurrentAnalysis extends AppCompatActivity {
                     JSONObject obj = new JSONObject(imageUploadRequest.getResult());
                     if (obj.getString("message").equals("none")) {
                         Toast.makeText(getApplicationContext(), "Image Uploaded Successfully", Toast.LENGTH_LONG).show();
-                        User.setUserImageNo(User.getUserImageNo() + 1);
+                        User.getInstance().setUserImageNo(User.getInstance().getUserImageNo() + 1);
                         openMainActivity();
                     }
                     else {

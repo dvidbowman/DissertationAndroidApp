@@ -39,8 +39,8 @@ public class Login extends AppCompatActivity {
         devSkip_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                User.setUserId(0);
-                User.setUserImageNo(0);
+                User.getInstance().setUserId(0);
+                User.getInstance().setUserImageNo(0);
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
@@ -89,10 +89,11 @@ public class Login extends AppCompatActivity {
                                         JSONObject obj = new JSONObject(logInAuthRequest.getResult());
 
                                         if (obj.getString("message").equals("none")) {
-                                            User.setUserId(Integer.parseInt(obj.getString("id")));
-                                            User.setUserImageNo(Integer.parseInt(obj.getString("noImages")));
-                                            User.setLoggedIn(true);
-                                            Toast.makeText(getApplicationContext(), "Login Successful: UserID = " + User.getUserId(), Toast.LENGTH_SHORT).show();
+                                            User.getInstance().setUserId(Integer.parseInt(obj.getString("id")));
+                                            User.getInstance().setUserImageNo(Integer.parseInt(obj.getString("noImages")));
+                                            User.getInstance().setLoggedIn(true);
+
+                                            Toast.makeText(getApplicationContext(), "Login Successful: UserID = " + User.getInstance().getUserId(), Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                             startActivity(intent);
                                             finish();
