@@ -74,7 +74,7 @@ public class makeRequest extends Thread {
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, UTF8));
             StringBuilder post_data = new StringBuilder();
 
-            // Switch Case handles the action to be performed
+            // Switch Case handles the action to be performed, appending correct fields where necessary
             switch(action) {
                 case "signUp":
                 case "logIn":
@@ -118,17 +118,18 @@ public class makeRequest extends Thread {
             httpURLConnection.disconnect();
             setData(result.toString());
 
-
         } catch(IOException e) {
             setData(e.toString());
         }
     }
 
+    // Starts HTTP request
     public Boolean startRequest() {
         makeRequest.this.start();
         return true;
     }
 
+    // Check that HTTP request has been completed successfully
     public Boolean onComplete() {
         while(true) {
             if(!this.isAlive()) {
@@ -148,30 +149,5 @@ public class makeRequest extends Thread {
     public String getData() {
         return result_data;
     }
-
-    //Getters used for testing
-    public String getURL() { return this.url; }
-
-    public String getHttpMethod() { return this.httpMethod; }
-
-    public String getAction() { return this.action; }
-
-    public String getImgToString() { return this.imgToString;}
-
-    public String getCurrentRowNumber() { return this.currentRowNumber;}
-
-    public String getDeviceManufacturer() { return this.deviceManufacturer;}
-
-    public String getDeviceModel() { return this.deviceModel;}
-
-    public String getDeviceOs() { return this.deviceOs;}
-
-    public String getAverageRed() { return this.averageRed;}
-
-    public String getPco2() { return this.pco2;}
-
-    public String[] getField() { return this.field; }
-
-    public String[] getDataArray() { return this.data; }
 
 }

@@ -4,11 +4,12 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 
 public class operationsUtility {
-
+    // Method used for getting calculated %CO2 value from a Bitmap
     public static double getCalculatedCO2Percentage(Bitmap bmp) {
         double redTotal = 0;
 
-        for (int y = 0; y < bmp.getHeight(); y++) {                             // Currently uses every pixel in the Bitmap
+        // Gets red value from every pixel in the Bitmap
+        for (int y = 0; y < bmp.getHeight(); y++) {
             for (int x = 0; x < bmp.getWidth(); x++) {
                 int pixelColours = bmp.getPixel(x, y);
                 redTotal += Color.red(pixelColours);

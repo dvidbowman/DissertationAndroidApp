@@ -1,12 +1,8 @@
 package com.example.initimagecapture;
 
-// Initial Code adapted from https://github.com/eddydn/AndroidCamera2API
-// Following the video tutorial at https://www.youtube.com/watch?v=oPu42I0HSi4
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -28,7 +24,6 @@ import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -86,6 +81,7 @@ public class ImageCapture extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_capture);
 
+        // Control Definition
         camera_texturev = findViewById(R.id.textureView_camera);
         back_btn = (Button) findViewById(R.id.button_backCapture);
         capture_btn = findViewById(R.id.button_captureImage);
@@ -330,6 +326,7 @@ public class ImageCapture extends AppCompatActivity {
         }
     }
 
+    // Activity Methods
     public void openMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

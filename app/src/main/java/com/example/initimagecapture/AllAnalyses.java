@@ -3,7 +3,6 @@ package com.example.initimagecapture;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,11 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-
 import org.json.*;
 
 public class AllAnalyses extends AppCompatActivity {
@@ -32,6 +29,8 @@ public class AllAnalyses extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_analyses);
+
+        // Control Definition
         years_spinner = findViewById(R.id.spinner_years);
         months_spinner = findViewById(R.id.spinner_months);
 
@@ -117,7 +116,8 @@ public class AllAnalyses extends AppCompatActivity {
                     try {
                         JSONObject obj = new JSONObject(getUserImagesRequest.getResult());
 
-                        if (!obj.getString("id").equals("0")) {
+                        if (!obj.getString("id").equals("0")) {     // id in JSON will be zero if image is found
+                            // Getting attributes of the image
                             String id = obj.getString("id");
                             String date = obj.getString("date");
                             String value = obj.getString("value");
@@ -135,9 +135,9 @@ public class AllAnalyses extends AppCompatActivity {
             }
         }
 
-        Toast.makeText(getApplicationContext(), "Images found: " + images.size(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Images found: " + images.size(), Toast.LENGTH_SHORT).show();   // Number of images found is displayed
 
-        RVAdapter adapter = new RVAdapter(this, images);
+        RVAdapter adapter = new RVAdapter(this, images);    // RecyclerView Adapter is instantiated
         images_recyclerView.setAdapter(adapter);
         images_recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

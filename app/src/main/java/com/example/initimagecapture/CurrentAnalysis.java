@@ -1,7 +1,6 @@
 package com.example.initimagecapture;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,11 +12,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
 
 public class CurrentAnalysis extends AppCompatActivity {
     // Controls
@@ -32,8 +28,6 @@ public class CurrentAnalysis extends AppCompatActivity {
     private boolean cameFromCamera;
     private byte[] initialByteArray;
 
-    // Bitmap reactiveBitmap = BitmapFactory.decodeByteArray(User.getCroppedReactiveByteArray(), 0, User.getCroppedReactiveByteArray().length);
-    // Bitmap nonreactiveBitmap = BitmapFactory.decodeByteArray(User.getCroppedNonReactiveByteArray(), 0, User.getCroppedNonReactiveByteArray().length);
     Bitmap reactiveBitmap;
     Bitmap nonreactiveBitmap;
 
@@ -52,6 +46,7 @@ public class CurrentAnalysis extends AppCompatActivity {
             nonreactiveBitmap = BitmapFactory.decodeByteArray(croppedNonReactiveByteArray, 0, croppedNonReactiveByteArray.length);
         }
 
+        // Control Definition
         reactivePCO2_txtv = (TextView) findViewById(R.id.textView_reactivePCO2);
         nonreactivePCO2_txtv = (TextView) findViewById(R.id.textView_nonReactivePCO2);
         reactiveRed_txtv = (TextView) findViewById(R.id.textView_reactiveRed);
@@ -61,12 +56,14 @@ public class CurrentAnalysis extends AppCompatActivity {
         croppedReactive_imgv = (ImageView) findViewById(R.id.imageView_crop);
         fullImage_imgv = (ImageView) findViewById(R.id.imageView_fullImage);
 
+        // Save button is hidden if user is not logged in
         if (!User.getInstance().getLoggedIn()) {
             save_btn.setVisibility(View.INVISIBLE);
         }
 
         croppedReactive_imgv.setImageBitmap(reactiveBitmap);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(initialByteArray, 0, initialByteArray.length);
+
+        Bitmap bitmap = BitmapFactory.decodeByteArray(initialByteArray, 0, initialByteArray.length);    // Bitmap for full-sized image created
         fullImage_imgv.setImageBitmap(bitmap);
 
         savedPCO2 = operationsUtility.getCalculatedCO2Percentage(reactiveBitmap);
@@ -76,9 +73,11 @@ public class CurrentAnalysis extends AppCompatActivity {
         nonreactivePCO2_txtv.setText(String.valueOf(operationsUtility.getCalculatedCO2Percentage(nonreactiveBitmap)));
         nonReactiveRed_txtv.setText(String.valueOf(averageRed));
 
+        // OnClickListener for Back button
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Back button takes user to activity they came from
                 if (cameFromCamera) {
                     openImageCaptureActivity();
                 }
@@ -88,6 +87,7 @@ public class CurrentAnalysis extends AppCompatActivity {
             }
         });
 
+        // OnClickListener for Save button
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,6 +126,7 @@ public class CurrentAnalysis extends AppCompatActivity {
         }
     }
 
+    // Activity Methods
     private void openImageImportActivity() {
         Intent intent = new Intent(this, ImageImport.class);
         startActivity(intent);

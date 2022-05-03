@@ -1,38 +1,16 @@
 package com.example.initimagecapture;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.opencv.android.Utils;
-import org.opencv.core.Core;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfInt;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.MatOfPoint2f;
-import org.opencv.core.Point;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
-import org.opencv.utils.Converters;
-
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ImageManipulation extends AppCompatActivity {
     // Controls
@@ -61,13 +39,13 @@ public class ImageManipulation extends AppCompatActivity {
             initialByteArray = extras.getByteArray("initialByteArray");
         }
 
+        // Control Definition
         warpedLabel_txtv = findViewById(R.id.textView_WarpedImage);
         reactiveLabel_txtv = findViewById(R.id.textView_ReactiveAreas);
         failLabel1_txtv = findViewById(R.id.textView_failLabel1);
         failLabel2_txtv = findViewById(R.id.textView_failLabel2);
         failLabel1_txtv.setVisibility(View.INVISIBLE);
         failLabel2_txtv.setVisibility(View.INVISIBLE);
-
         discard_btn = findViewById(R.id.button_discardImage);
         next_btn = findViewById(R.id.button_nextImageAnalysis);
         preview_imgv = findViewById(R.id.imageView_preview);
@@ -81,7 +59,7 @@ public class ImageManipulation extends AppCompatActivity {
 
         // Automatic Rectangle Detection and Display of Cropped Images
         try {
-            Bitmap initPass = detectionUtility.findRectangle(bitmap);
+            Bitmap initPass = detectionUtility.findRectangle(bitmap);       // Initial Bandage Outline detection
             preview_imgv.setImageBitmap(initPass);
             detection_imgv.setImageBitmap(initResult);
 
@@ -89,6 +67,7 @@ public class ImageManipulation extends AppCompatActivity {
                 detectionFailed = true;
             }
             else {
+                // New Bitmap created that only contains reactive patch
                 Bitmap mainReactBmp = Bitmap.createBitmap(initResult, 10, 250, initResult.getWidth() - 10, initResult.getHeight() - 250);
                 Bitmap mainPass =  detectionUtility.findRectangle(mainReactBmp);
                 main_imgv.setImageBitmap(mainResult);
@@ -98,11 +77,14 @@ public class ImageManipulation extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Missing Bitmap", Toast.LENGTH_LONG).show();
                 }
                 else {
+                    // Reactive Patch Bitmap cropped further to only use center
                     int reactiveCropStartX = mainResult.getWidth() / 4;
                     int reactiveCropStartY = mainResult.getHeight() / 4;
                     int reactiveCropWidth = mainResult.getWidth() / 2;
                     int reactiveCropHeight = mainResult.getHeight() / 2;
                     mainCropped = Bitmap.createBitmap(mainResult, reactiveCropStartX, reactiveCropStartY, reactiveCropWidth, reactiveCropHeight);
+
+                    // New Bitmap created that only contains non-reactive patch
                     Bitmap constantReactBmp = Bitmap.createBitmap(initResult, 10, 10, initResult.getWidth() - 20, initResult.getHeight() - 535);
                     Bitmap constantPass = detectionUtility.findRectangle(constantReactBmp);
                     constant_imgv.setImageBitmap(constantResult);
@@ -111,6 +93,7 @@ public class ImageManipulation extends AppCompatActivity {
                         detectionFailed = true;
                     }
                     else {
+                        // Non-reactive Patch Bitmap cropped further to only use center
                         int nonreactiveCropStartX = constantResult.getWidth() / 4;
                         int nonreactiveCropStartY = constantResult.getHeight() / 4;
                         int nonreactiveCropWidth = constantResult.getWidth() / 2;
@@ -121,7 +104,7 @@ public class ImageManipulation extends AppCompatActivity {
 
             }
 
-            if (detectionFailed) {
+            if (detectionFailed) {  // If any of the sections are not detected properly
                 Toast.makeText(getApplicationContext(), "Missing Bitmap", Toast.LENGTH_LONG).show();
                 next_btn.setVisibility(View.INVISIBLE);
                 detection_imgv.setVisibility(View.INVISIBLE);
@@ -143,12 +126,10 @@ public class ImageManipulation extends AppCompatActivity {
             public void onClick(View v) {
                 ByteArrayOutputStream reactivebaos = new ByteArrayOutputStream();
                 mainCropped.compress(Bitmap.CompressFormat.JPEG, 100, reactivebaos);
-                // User.setCroppedReactiveByteArray(reactivebaos.toByteArray());
                 croppedReactiveByteArray = reactivebaos.toByteArray();
 
                 ByteArrayOutputStream nonreactivebaos = new ByteArrayOutputStream();
                 constantCropped.compress(Bitmap.CompressFormat.JPEG, 100, nonreactivebaos);
-                // User.setCroppedNonReactiveByteArray(nonreactivebaos.toByteArray());
                 croppedNonReactiveByteArray = reactivebaos.toByteArray();
 
                 openCurrentAnalysisActivity();
@@ -175,6 +156,7 @@ public class ImageManipulation extends AppCompatActivity {
 
     }
 
+    // Activity Methods
     private void openImageCaptureActivity() {
         Intent intent = new Intent(this, ImageCapture.class);
         startActivity(intent);

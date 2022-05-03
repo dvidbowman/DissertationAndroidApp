@@ -1,7 +1,6 @@
 package com.example.initimagecapture;
 
 import android.graphics.Bitmap;
-
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -14,21 +13,20 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.utils.Converters;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class detectionUtility {
 
-    public static Bitmap findRectangle(Bitmap image) throws Exception {
-        Mat first = new Mat();
+    public static Bitmap findRectangle(Bitmap image) {
+        Mat first = new Mat();      // Mat used for
         Mat temp = new Mat();
         Mat src = new Mat();
 
         Utils.bitmapToMat(image, temp);
         Utils.bitmapToMat(image, first);
 
-        Imgproc.cvtColor(temp, src, Imgproc.COLOR_BGR2RGB);
+        Imgproc.cvtColor(temp, src, Imgproc.COLOR_BGR2RGB);     // Colour shift
 
         Mat blurred = src.clone();
         Imgproc.medianBlur(src, blurred,9);
@@ -45,6 +43,7 @@ public class detectionUtility {
 
         List<Point> source = new ArrayList<Point>();
 
+        // maxArea used to find biggest rectangle, maxId used as to track which contour it is
         double maxArea = 0;
         int maxId = -1;
 
@@ -59,6 +58,7 @@ public class detectionUtility {
                     Imgproc.dilate(gray, gray, new Mat(), new Point(-1, -1), 1);
                 }
                 else {
+                    // adaptiveThreshold applied to handle subtle lighting changes
                     Imgproc.adaptiveThreshold(gray0, gray, thresholdLevel,
                             Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,
                             Imgproc.THRESH_BINARY,
@@ -71,6 +71,7 @@ public class detectionUtility {
                     MatOfPoint2f temp_contour = new MatOfPoint2f(contour.toArray());
                     double area = Imgproc.contourArea(contour);
                     MatOfPoint2f approxCurve_temp = new MatOfPoint2f();
+                    // approxPolyDP straightens lines by removing points
                     Imgproc.approxPolyDP(temp_contour, approxCurve_temp, Imgproc.arcLength(temp_contour, true) * 0.02, true);
 
                     if (approxCurve_temp.total() == 4 && area >= maxArea) {
@@ -94,7 +95,7 @@ public class detectionUtility {
             }
         }
 
-        if (maxId >= 0) {
+        if (maxId >= 0) {       // maxId will be -1 if no rectangle is detected
             double[] temp_double;
             List<Point> unorderedPoints = new ArrayList<Point>();
             temp_double = approxCurve.get(0, 0);
@@ -109,6 +110,7 @@ public class detectionUtility {
             temp_double = approxCurve.get(3, 0);
             Point unorderedP4 = new Point(temp_double[0], temp_double[1]);
 
+            // All points added to ArrayList so for loop can be used
             unorderedPoints.add(unorderedP1);
             unorderedPoints.add(unorderedP2);
             unorderedPoints.add(unorderedP3);
@@ -161,6 +163,10 @@ public class detectionUtility {
 
             ImageManipulation.detectionCounter++;
 
+            // Circles are drawn on the corners:
+            //      Red circles are the points before ordering
+            //      Blue circles are the points after ordering
+            //      Smallest circle = Point 1, Biggest circle = Point 4
             Imgproc.circle(src, unorderedP1, 15, new Scalar(255, 0, 0), 3);
             Imgproc.circle(src, unorderedP2, 30, new Scalar(255, 0, 0), 3);
             Imgproc.circle(src, unorderedP3, 50, new Scalar(255, 0, 0), 3);

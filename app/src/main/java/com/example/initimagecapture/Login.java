@@ -1,22 +1,16 @@
 package com.example.initimagecapture;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-// Adapted from github.com/vishnusivadasvs/advanced-httpurlconnection
 
 public class Login extends AppCompatActivity {
     // Controls
@@ -29,6 +23,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Control Definition
         username_textField = findViewById(R.id.textField_username);
         password_textField = findViewById(R.id.textField_password);
         logIn_btn = findViewById(R.id.button_Login);
@@ -88,7 +83,7 @@ public class Login extends AppCompatActivity {
                                     try {
                                         JSONObject obj = new JSONObject(logInAuthRequest.getResult());
 
-                                        if (obj.getString("message").equals("none")) {
+                                        if (obj.getString("message").equals("none")) {      // Message will be different than 'none' if an error occurs
                                             User.getInstance().setUserId(Integer.parseInt(obj.getString("id")));
                                             User.getInstance().setUserImageNo(Integer.parseInt(obj.getString("noImages")));
                                             User.getInstance().setLoggedIn(true);
@@ -100,7 +95,7 @@ public class Login extends AppCompatActivity {
 
                                         }
                                         else {
-                                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();    // Error message displayed in Toast
                                         }
 
                                     } catch (JSONException e) {

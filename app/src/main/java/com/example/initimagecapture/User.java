@@ -1,5 +1,7 @@
 package com.example.initimagecapture;
 
+// Singleton Class to hold user information
+
 public class User {
     private static User user;
 
@@ -24,6 +26,7 @@ public class User {
         user.setLoggedIn(false);
     }
 
+    // Getters / Setters
     public int getUserId() {
         return this.userId;
     }

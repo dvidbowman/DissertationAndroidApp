@@ -2,18 +2,17 @@ package com.example.initimagecapture;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
 import org.opencv.android.OpenCVLoader;
 
 public class MainActivity extends AppCompatActivity {
     private static String TAG = "MainActivity";
+    // OpenCV Installer Message
     static {
         if (OpenCVLoader.initDebug()) {
             Log.d(TAG, "OpenCV installed successfully");
@@ -23,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Controls
     private Button analyses_btn, camera_btn, logout_btn, import_btn;
 
     @Override
@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Activity Methods
     public void openAllAnalysesActivity() {
         Intent intent = new Intent(this, AllAnalyses.class);
         startActivity(intent);

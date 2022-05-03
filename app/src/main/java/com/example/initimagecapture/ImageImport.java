@@ -5,7 +5,6 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,10 +14,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 
 public class ImageImport extends AppCompatActivity {
+    // Controls
     private Button back_btn, chooseImage_btn, next_btn;
     private ImageView importedImage_imgv;
 
@@ -29,6 +30,7 @@ public class ImageImport extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_import);
 
+        // Control Definition
         importedImage_imgv = (ImageView) findViewById(R.id.imageView_importedImage);
 
         // OnClickListener for Back button
@@ -48,11 +50,17 @@ public class ImageImport extends AppCompatActivity {
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK) {
                             Intent data = result.getData();
-                            Uri selectedImageUri = data.getData();
+                            try {
+                                Uri selectedImageUri = data.getData();
 
-                            if (selectedImageUri != null) {
-                                importedImage_imgv.setImageURI(selectedImageUri);
-                                next_btn.setVisibility(View.VISIBLE);
+                                if (selectedImageUri != null) {
+                                    importedImage_imgv.setImageURI(selectedImageUri);
+                                    next_btn.setVisibility(View.VISIBLE);       // Next button only shown when an image is selected
+                                }
+                            }
+                            catch (NullPointerException e) {
+                                Toast.makeText(getApplicationContext(), "Image data could not be found", Toast.LENGTH_LONG).show();
+                                e.printStackTrace();
                             }
                         }
                     }
@@ -92,6 +100,7 @@ public class ImageImport extends AppCompatActivity {
 
     }
 
+    // Activity Methods
     public void openMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
