@@ -130,7 +130,7 @@ public class ImageManipulation extends AppCompatActivity {
 
                 ByteArrayOutputStream nonreactivebaos = new ByteArrayOutputStream();
                 constantCropped.compress(Bitmap.CompressFormat.JPEG, 100, nonreactivebaos);
-                croppedNonReactiveByteArray = reactivebaos.toByteArray();
+                croppedNonReactiveByteArray = nonreactivebaos.toByteArray();
 
                 openCurrentAnalysisActivity();
             }
